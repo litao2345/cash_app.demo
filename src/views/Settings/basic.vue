@@ -6,27 +6,29 @@
     </el-row>
     <el-row>
       <el-col :span="15"><span @click="open('a')">选择型号</span></el-col>
-      <el-col :span="4"><span>不使用</span></el-col>
+      <el-col :span="4"><span>{{selected_name}}</span></el-col>
       <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
     </el-row>
     <el-row>
       <el-col :span="15"><span @click="open('b')">打印宽度</span></el-col>
-      <el-col :span="4"><span>不使用</span></el-col>
+      <el-col :span="4"><span></span></el-col>
       <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
     </el-row>
     <el-row>
-      <el-col :span="15"><span @click="open('c')">字体大小</span></el-col>
-      <el-col :span="4"><span>不使用</span></el-col>
+      <el-col :span="15"><span>字体大小</span></el-col>
+      <el-col :span="4"><span></span></el-col>
       <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
     </el-row>
     <el-row>
-      <el-col :span="15"><span @click="open('d')">打印份数</span></el-col>
-      <el-col :span="4"><span>不使用</span></el-col>
+      <el-col :span="15"><span>打印份数</span></el-col>
+      <el-col :span="4"><span></span></el-col>
       <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
     </el-row>
 
     <!-- 子组件 -->
-    <itemselected ref="itemselected"></itemselected>
+    <itemselected :code="code" :selected="selected" ref="itemselected"
+      v-on:basic_select="getData"
+      v-show="type"></itemselected>
   </div>
 </template>
 
@@ -40,26 +42,40 @@ export default {
   ],
   data () {
     return {
-      pop_up: false,
-      chooses: ['不使用', 'USB-0017', 'USB-0087', 'USB-0088']
+      code: '',
+      selected: 0,
+      selected_name: '未使用',
+      type: false
     }
   },
   methods: {
-    open (code) {
-      if (code === 'a') {
-        this.chooses = ['不使用', 'USB-0017', 'USB-0087', 'USB-0088']
-      } else if (code === 'b') {
-        this.chooses = ['50cm', '60cm', '70cm', '80cm']
+    open (k) {
+      this.code = {
+        key: k,
+        name: '选择型号',
+        list: {
+          0: {
+            id: 0,
+            name: '未使用'
+          },
+          1: {
+            id: 1,
+            name: '2017-2-3'
+          },
+          2: {
+            id: 2,
+            name: '2018-2-5'
+          }
+        }
       }
-      console.log(code)
-      this.pop_up = true
-      this.$refs.itemselected.childFn('true')
+      this.type = true
     },
-    back () {
-      this.pop_up = false
-    },
-    aaa (val) {
-      console.log('val', this.$refs.ref.value)
+    getData (k, select) {
+      this.type = false
+      if (k !== null) {
+        this.selected_name = this.code.list[select].name
+        this.selected = select
+      }
     }
   },
   created () {

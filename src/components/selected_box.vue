@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <transition name="slide-fade">
-      <div class="settings_pop_up" v-show="pop_up" ref="pop_up_style" 
-        :style="{width: screenWidth + 'px'}">
-        <div @click="back" class="settings_back">
-          <el-button type="primary"> 返 回 </el-button>
-        </div>
-        <el-row class="settings_choose">
-         <el-radio-group v-model="choos_class" ref="ref" @change="aaa()">
-           <el-radio v-for="choose in chooses" :key="choose" :label="choose">{{choose}}</el-radio>
-         </el-radio-group>
-        </el-row> 
+  <transition name="slide-fade">
+    <div class="settings_pop_up" ref="pop_up_style" :style="{width: screenWidth + 'px'}">
+      <div class="settings_back"
+        @click="back">
+        <el-button type="primary"> 返 回 </el-button>
       </div>
-    </transition>
-  </div>
+      <el-row class="settings_choose">
+        <el-radio-group ref="ref"
+          v-model="basic_select">
+          <el-radio :key="index" :label="item.id"
+            v-for="(item, index) in code.list">{{item.name}}</el-radio>
+        </el-radio-group>
+      </el-row> 
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -21,27 +21,19 @@ export default {
   components: {
   },
   props: [
+    'code',
+    'selected'
   ],
   data () {
     return {
-      pop_up: false,
-      choos_class: '不使用',
-      chooses: ['不使用', 'USB-0017', 'USB-0087', 'USB-0088'],
-      screenWidth: document.body.clientWidth - 478
+      screenWidth: document.body.clientWidth - 478,
+      basic_select: this.selected
     }
   },
   methods: {
-    open (code) {
-    },
     back () {
-      this.pop_up = false
-    },
-    aaa (val) {
-      console.log('val', this.$refs.ref.value)
-    },
-    childFn (e) {
-      console.log(e)
-      this.pop_up = e
+      if (this.selected === this.basic_select) this.$emit('basic_select', null)
+      else this.$emit('basic_select', this.code.key, this.basic_select)
     }
   },
   created () {
