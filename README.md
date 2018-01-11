@@ -1,8 +1,8 @@
-# cash_app
+# cash_app.demo
 
 > A Vue.js project
 
-## 创建步骤
+## Build Setup
 
 ``` bash
 # install dependencies
@@ -13,39 +13,18 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+
+# run unit tests
+npm run unit
+
+# run e2e tests
+npm run e2e
+
+# run all tests
+npm test
 ```
 
-## 视图模块分布
-
-``` bash
-# 主视图
-	Home
-
-	点餐
-	订单
-	消息中心
-	商品沽清
-	会员
-	打印状态
-	数据同步
-	系统设置
-		常规设置
-		配置普通打印机
-		配置后厨打印机
-		配置标签打印机
-		配置发票打印机
-		配置打印格式
-		后厨分类打印
-		其它设备
-		门店选择
-		系统更新
-		关于我们
-	交班
-    404
-
-# 登录
-	Login
-
-# 其它
-	Other
-```
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
