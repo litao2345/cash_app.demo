@@ -1,7 +1,7 @@
 <template>
-  <div class="settings">
+  <div class="inline settings">
     <div class="nav">
-      <div class="list"
+      <div class="lnk"
         v-if="item.name === '系统设置'"
         v-for="item of $router.options.routes[0]['children']">
         <router-link :key="ix" :to="{path: it.path}"
@@ -60,21 +60,14 @@ export default {
 .el-tab-pane{height:100%;overflow-y:auto;margin-top:40px;}
 
 /**
- * 模块
+ * 导航
  */
-.settings{height:100%;overflow:hidden;}
-
-/* 导航 */
-.nav{width:300px;height:100%;margin-right:10px;padding:0 30px;overflow-y:auto;float:left;background-color:#fff;}
 .nav a{height:61px;padding:0 10px;display:block;font-size:18px;line-height:60px;text-align:left;cursor:pointer;
   transition:all .2s ease;}
 .nav a:after{width:300px;height:1px;margin-left:-10px;display:block;background-color:#DFE2E4;content:"";}
 .nav a.router-link-active{width:360px;margin-left:-30px;padding:0 40px;background-color:#F9FCFE;color:#62A8EA;}
 
-.nav .list{padding:30px 0;}
-
-/* 主区域 */
-.main{height:100%;overflow-x:hidden;overflow-y:auto;background-color:#fff;}
+.nav .lnk{padding:30px 0;}
 </style>
 
 <style>
