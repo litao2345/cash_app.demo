@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="base">
     <el-row>
-      <el-col :span="24"><div class="setting_base_one">收银主题：</div></el-col>
+      <el-col :span="24">收银主题：</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
@@ -14,7 +14,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24"><div class="">通用：</div></el-col>
+      <el-col :span="24">通用：</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
@@ -26,7 +26,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24"><div class="">关闭主界面时：</div></el-col>
+      <el-col :span="24">关闭主界面时：</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
@@ -35,7 +35,7 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24"><div class="">主网络收银机：</div></el-col>
+      <el-col :span="24">主网络收银机：</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
@@ -44,19 +44,19 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24"><div class="">后厨显示ip地址：</div></el-col>
+      <el-col :span="24">后厨显示ip地址：</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <p class="settings_ip_address">123132312</p>
+        <p class="ip">123132312</p>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="24"><div class="">快捷备注：</div></el-col>
+      <el-col :span="24">快捷备注：</el-col>
     </el-row>
     <el-row>
       <el-col :span="24">
-        <textarea class="settings_text" name="" id=""  rows="10"></textarea>
+        <textarea class="text" rows="10"></textarea>
       </el-col>
     </el-row>
   </div>

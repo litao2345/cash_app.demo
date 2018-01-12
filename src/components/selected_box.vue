@@ -1,17 +1,19 @@
 <template>
-  <transition name="slide-fade">
-    <div class="settings_pop_up" ref="pop_up_style" :style="{width: screenWidth + 'px'}">
-      <div class="settings_back"
+  <transition name="pop_up">
+    <div class="pop_up" ref="pop_up_style" :style="{width: screenWidth + 'px'}">
+      <div class="pop_head"
         @click="back">
         <el-button type="primary"> 返 回 </el-button>
       </div>
-      <el-row class="settings_choose">
-        <el-radio-group ref="ref"
-          v-model="basic_select">
-          <el-radio :key="index" :label="item.id"
-            v-for="(item, index) in code.list">{{item.name}}</el-radio>
-        </el-radio-group>
-      </el-row> 
+      <div class="pop_radio">
+        <el-row>
+          <el-radio-group ref="ref"
+            v-model="basic_select">
+            <el-radio :key="index" :label="item.id"
+              v-for="(item, index) in code.list">{{item.name}}</el-radio>
+          </el-radio-group>
+        </el-row> 
+      </div>
     </div>
   </transition>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-row class="settings_common_printer">
-      <el-col :span="18"><div class="">发票打印机：</div></el-col>
+    <el-row>
+      <el-col :span="18">发票打印机：</el-col>
       <el-col :span="6" ><el-button  type="primary">测试</el-button></el-col>
     </el-row>
     <el-row>

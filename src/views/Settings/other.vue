@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-row class="settings_common_printer">
-      <el-col :span="18"><div class="">其他设备设置：</div></el-col>
+    <el-row>
+      <el-col :span="18">其他设备设置：</el-col>
     </el-row>
     <el-row>
       <el-col :span="15"><span>选择顾客显示屏设备</span></el-col>

@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <el-row class="settings_common_printer">
-      <el-col :span="18"><div class="">门店选择：</div></el-col>
+  <div class="shop">
+    <el-row>
+      <el-col :span="18">门店选择：</el-col>
     </el-row>
-    <el-row class="settings_shop">
+    <el-row>
      <el-radio-group v-model="shop_choose">
        <el-radio :label="1">天鹅湖万达店</el-radio>
        <el-radio :label="2">禹州华侨城店</el-radio>
