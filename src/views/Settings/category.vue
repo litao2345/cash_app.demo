@@ -5,7 +5,7 @@
     </el-row>
     <el-row class="">
       <el-col :span="18">
-        <div class="">
+        <div class="category_class">
            <el-radio v-model="type" label="奶茶" border size="medium">奶茶</el-radio>
            <el-radio v-model="type" label="小吃" border size="medium">小吃</el-radio>
            <el-radio v-model="type" label="简餐" border size="medium">简餐</el-radio>

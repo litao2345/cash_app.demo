@@ -116,6 +116,7 @@ export default {
 .settings_cook_type_choose{margin-top:20px;}
 .settings_cook_type_choose .el-radio{display:block;}
 .settings_cook_type_choose .el-radio+.el-radio{margin-left:0;margin-top:20px;}
+.category_class .el-radio__input{display:none;}
 
  /**
  * 门店选择
