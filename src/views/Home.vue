@@ -2,7 +2,7 @@
   <el-container class="app">
     <el-aside class="aside" width="88px">
       <div class="lnk">
-        <router-link :key="index" :to="item.path" :class="item.class"
+        <router-link :key="index" :to="item.path"
           v-if="!item.hidden"
           v-for="(item, index) of $router.options.routes[0]['children']">{{item.name}}</router-link>
       </div>

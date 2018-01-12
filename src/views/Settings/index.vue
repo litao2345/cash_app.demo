@@ -103,14 +103,14 @@ export default {
 .settings_common_printer div{line-height:40px;}
 .el-icon-arrow-right{margin-top:4px;}
 
- /**
+/**
  * 后厨分类打印
  */
 .settings_cook_type_choose{margin-top:20px;}
 .settings_cook_type_choose .el-radio{display:block;}
 .settings_cook_type_choose .el-radio+.el-radio{margin-left:0;margin-top:20px;}
 
- /**
+/**
  * 门店选择
  */
 .settings_shop .el-radio-group{display:block;}
