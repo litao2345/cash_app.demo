@@ -58,13 +58,15 @@ export default new Router({
         {
           name: '消息中心',
           path: '/message',
-          component: Message
+          component: Message,
+          hidden: true
         },
 
         {
           name: '商品沽清',
           path: '/clear',
-          component: Clear
+          component: Clear,
+          hidden: true
         },
 
         {
@@ -154,8 +156,7 @@ export default new Router({
         {
           name: '交班',
           path: '/signout',
-          component: Signout,
-          class: 'jiao'
+          component: Signout
         },
 
         {
