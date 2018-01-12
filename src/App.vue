@@ -34,6 +34,22 @@ textarea{outline:none;}
 textarea{resize:none;}
 
 /**
+ * 淡入淡出动画
+ */
+.fade-enter-active,
+.fade-leave-active{transition:all .2s ease;}
+
+.fade-enter,
+.fade-leave-active{opacity:0;}
+
+/**
+ * 布局
+ */
+.inline{height:100%;overflow:hidden;}
+.inline .nav{width:300px;height:100%;margin-right:10px;padding:0 30px;overflow-y:auto;float:left;background-color:#fff;}
+.inline .main{height:100%;overflow-x:hidden;overflow-y:auto;background-color:#fff;}
+
+/**
  * 其它
  */
 .app{height:100%;overflow:hidden;}
@@ -43,11 +59,6 @@ textarea{resize:none;}
 .blank{padding:20px 0;color:#777;font-size:15px;line-height:40px;text-align:center;}
 
 /**
- * 淡入淡出动画
+ * 重置
  */
-.fade-enter-active,
-.fade-leave-active{transition:all .2s ease;}
-
-.fade-enter,
-.fade-leave-active{opacity:0;}
 </style>
