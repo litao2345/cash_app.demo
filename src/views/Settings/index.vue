@@ -56,6 +56,8 @@ export default {
 /**
  * 重置
  */
+.main{padding:30px 60px;box-sizing:border-box;}
+
 .el-tabs{height:100%;}
 .el-tab-pane{height:100%;overflow-y:auto;margin-top:40px;}
 
@@ -72,49 +74,31 @@ export default {
 
 <style>
 /**
- * 弹框
+ * 重置
  */
-.slide-fade-enter-active {transition:all .5s ease;}
-.slide-fade-leave-active {transition:all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);}
-.slide-fade-enter, .slide-fade-leave-to{transform:translateX(1920px);}
-.settings_pop_up{position:absolute;top:10px;right:10px;background:white;height:97%;overflow:auto;}
-.settings_back{width:80%;margin:0 auto; margin-top:40px;padding-bottom:20px;border-bottom:1px solid #d0d0d0;}
-.settings_choose .el-radio-group{display:block;}
-.settings_choose .el-radio{display:block;}
-.settings_choose .el-radio+.el-radio{margin-left:0;margin-top:20px;}
-.settings_choose .el-radio__input{float:right;}
+.settings .el-radio-group{display:block;}
+.settings .el-radio{display:block;}
+.settings .el-radio+.el-radio{margin-left:0;margin-top:20px;}
 
-/**
- * 标题
- */
-.el-row{width:80%;margin:0 auto;padding:10px 0;}
+.settings .el-row{padding:20px 0;}
+.settings .el-row:first-child{border-bottom:1px solid #d0d0d0;line-height:40px;}
+
+.settings .el-icon-arrow-right{margin-top:4px;}
+
+.settings .pup_up .el-radio__input{float:right;}
+
+.settings .radio .el-radio-group{display:inline-block;}
+.settings .radio .el-radio{display:inline-block;}
+.settings .radio .el-radio__input{display:none;}
 
 /**
  * 常规设置
  */
-.setting_base_one{margin-top:40px;}
-.settings_ip_address{border:1px solid #dcdfe6;padding:10px 0 10px 10px;}
-.settings_text{width:100%;}
-
-/**
- * 配置普通打印机
- */
-.settings_common_printer{border-bottom:1px solid #d0d0d0;padding:40px 0 20px;}
-.settings_common_printer div{line-height:40px;}
-.el-icon-arrow-right{margin-top:4px;}
-
-/**
- * 后厨分类打印
- */
-.settings_cook_type_choose{margin-top:20px;}
-.settings_cook_type_choose .el-radio{display:block;}
-.settings_cook_type_choose .el-radio+.el-radio{margin-left:0;margin-top:20px;}
+.settings .base .ip{border:1px solid #dcdfe6;padding:10px;margin:0;}
+.settings .base .text{width:100%;padding:5px 10px;box-sizing:border-box;}
 
 /**
  * 门店选择
  */
-.settings_shop .el-radio-group{display:block;}
-.settings_shop .el-radio{display:block;}
-.settings_shop .el-radio+.el-radio{margin-left:0;margin-top:20px;}
-.settings_shop .el-radio__input{float:right;}
+.settings .shop .el-radio__input{float:right;}
 </style>

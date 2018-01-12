@@ -1,13 +1,15 @@
 <template>
   <div>
-    <el-row class="settings_common_printer">
-      <el-col :span="18"><div class="">小票打印机：</div></el-col>
+    <el-row>
+      <el-col :span="18">小票打印机：</el-col>
       <el-col :span="6" ><el-button  type="primary">测试</el-button></el-col>
     </el-row>
     <el-row>
-      <el-col :span="15"><span @click="open('a')">选择型号</span></el-col>
-      <el-col :span="4"><span>{{selected_name}}</span></el-col>
-      <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+      <div @click="open('a')">
+        <el-col :span="15"><span>选择型号</span></el-col>
+        <el-col :span="4"><span>{{selected_name}}</span></el-col>
+        <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+      </div>
     </el-row>
     <el-row>
       <el-col :span="15"><span @click="open('b')">打印宽度</span></el-col>
@@ -27,7 +29,7 @@
 
     <!-- 子组件 -->
     <itemselected :code="code" :selected="selected" ref="itemselected"
-      v-on:basic_select="getData"
+      @basic_select="getData"
       v-show="type"></itemselected>
   </div>
 </template>

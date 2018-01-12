@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-row class="settings_common_printer">
-      <el-col :span="18"><div class="">关于我们：</div></el-col>
+    <el-row>
+      <el-col :span="18">关于我们：</el-col>
     </el-row>
-    <el-row class="">
+    <el-row>
      <div>关于我们：</div>
     </el-row>
   </div>
