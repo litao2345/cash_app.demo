@@ -6,4 +6,7 @@ const DECREMENT = (state) => {
   state.Count --
 }
 
-export {INCREMENT, DECREMENT}
+export {
+  INCREMENT,
+  DECREMENT
+}

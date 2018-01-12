@@ -6,4 +6,7 @@ const decrement = ({commit}) => {
   commit('DECREMENT')
 }
 
-export {increment, decrement}
+export {
+  increment,
+  decrement
+}

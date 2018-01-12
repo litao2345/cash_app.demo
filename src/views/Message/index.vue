@@ -1,6 +1,9 @@
 <template>
-  <div class="home">
-    <p>{{msg}}</p>
+  <div class="inline message">
+    <div class="nav">
+    </div>
+    <div class="main">
+    </div>
   </div>
 </template>
 
@@ -8,12 +11,14 @@
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
     }
   }
 }
 </script>
 
 <style scoped>
-.home{}
+/**
+ * 重置
+ */
+.nav{width:120px;margin:0;padding:0;background:none;}
 </style>

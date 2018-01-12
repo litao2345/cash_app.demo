@@ -1,6 +1,7 @@
 <template>
-  <div class="home">
-    <p>{{msg}}</p>
+  <div class="inline printer">
+    <div class="main">
+    </div>
   </div>
 </template>
 
@@ -8,12 +9,10 @@
 export default {
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
     }
   }
 }
 </script>
 
 <style scoped>
-.home{}
 </style>
