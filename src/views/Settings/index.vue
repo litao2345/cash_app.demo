@@ -98,6 +98,24 @@ export default {
 .settings .base .text{width:100%;padding:5px 10px;box-sizing:border-box;}
 
 /**
+<<<<<<< HEAD
+=======
+ * 配置普通打印机
+ */
+.settings_common_printer{border-bottom:1px solid #d0d0d0;padding:40px 0 20px;}
+.settings_common_printer div{line-height:40px;}
+.el-icon-arrow-right{margin-top:4px;}
+
+/**
+ * 后厨分类打印
+ */
+.settings_cook_type_choose{margin-top:20px;}
+.settings_cook_type_choose .el-radio{display:block;}
+.settings_cook_type_choose .el-radio+.el-radio{margin-left:0;margin-top:20px;}
+.category_class .el-radio__input{display:none;}
+
+/**
+>>>>>>> 92bd46ac3fcf4876a1e69f37f3dc2627845911b6
  * 门店选择
  */
 .settings .shop .el-radio__input{float:right;}
