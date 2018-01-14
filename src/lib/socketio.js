@@ -44,4 +44,6 @@ const jsonp = (url, datas, $this) => {
   return promise
 }
 
-export {jsonp}
+export {
+  jsonp
+}

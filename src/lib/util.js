@@ -6,27 +6,20 @@
  * @return {[Promise]} promise [回调对象]
  */
 const jsonp = (url, datas, $this) => {
-  if (url.indexOf('http://') === -1) {
-    if (!datas.account && !datas.password) {
-      datas.a = $this.ACCOUNT
-      datas.p = $this.PASSWORD
-      datas.company_id = $this.COMPANYID
-    }
-
-    url = $this.jsonpUrl + url
-  } else {
+  if (!datas.account && !datas.password) {
     datas.a = $this.ACCOUNT
     datas.p = $this.PASSWORD
+    datas.shop_id = $this.SHOPID
   }
 
   const promise = new Promise((resolve, reject) => {
+    url = 'http://' + Release + 'cash.goonjin.com/api/' + url
     $this.$http.jsonp(url, {params: datas}).then((rt) => {
       if (rt.body.code === 0) {
         resolve(rt.body.data)
       } else if (rt.body.code === 503) {
-        localStorage.removeItem(this.Release + 'ACCOUNT')
-        localStorage.removeItem(this.Release + 'PASSWORD')
-        localStorage.removeItem(this.Release + 'COMPANYID')
+        localStorage.removeItem(Release + 'ACCOUNT')
+        localStorage.removeItem(Release + 'PASSWORD')
 
         location.reload()
       } else {
@@ -44,4 +37,6 @@ const jsonp = (url, datas, $this) => {
   return promise
 }
 
-export {jsonp}
+export {
+  jsonp
+}
