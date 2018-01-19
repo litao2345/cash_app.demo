@@ -71,8 +71,8 @@ export default {
 .settings .el-radio{display:block;}
 .settings .el-radio+.el-radio{margin-left:0;margin-top:20px;}
 
-.settings .el-row{padding:20px 0;}
-.settings .el-row:first-child{border-bottom:1px solid #d0d0d0;line-height:40px;}
+.settings .el-row{padding-top:15px;}
+.settings .el-row:first-child{border-bottom:1px solid #d0d0d0;line-height:40px;padding-bottom:20px;}
 
 .settings .el-icon-arrow-right{margin-top:4px;}
 

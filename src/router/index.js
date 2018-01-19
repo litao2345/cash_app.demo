@@ -9,9 +9,18 @@ import Failed from '@/views/404.vue'
 
 import Shopping from '@/views/Shopping'
 import Orders from '@/views/Orders'
+
 import Message from '@/views/Message'
+import MessageUser from '@/views/Message/user'
+import MessageCode from '@/views/Message/code'
+import MessageTakeout from '@/views/Message/takeout'
+
 import Clear from '@/views/Clear'
+
 import Members from '@/views/Members'
+import MembersManage from '@/views/Members/manage'
+import MembersNewmembers from '@/views/Members/newmembers'
+
 import Printer from '@/views/Printer'
 import Sync from '@/views/Sync'
 
@@ -59,6 +68,26 @@ export default new Router({
           name: '消息中心',
           path: '/message',
           component: Message,
+          redirect: {
+            path: '/message/user'
+          },
+          children: [
+            {
+              name: '客户消息',
+              path: '/message/user',
+              component: MessageUser
+            },
+            {
+              name: '二维码点餐',
+              path: '/message/code',
+              component: MessageCode
+            },
+            {
+              name: '外带消息',
+              path: '/message/takeout',
+              component: MessageTakeout
+            }
+          ],
           hidden: true
         },
 
@@ -72,7 +101,22 @@ export default new Router({
         {
           name: '会员',
           path: '/members',
-          component: Members
+          component: Members,
+          redirect: {
+            path: '/members/manage'
+          },
+          children: [
+            {
+              name: '会员管理',
+              path: '/members/manage',
+              component: MembersManage
+            },
+            {
+              name: '新建会员',
+              path: '/members/newmembers',
+              component: MembersNewmembers
+            }
+          ]
         },
 
         {

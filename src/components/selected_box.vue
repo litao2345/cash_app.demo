@@ -1,6 +1,6 @@
 <template>
   <transition name="pop_up">
-    <div class="pop_up" ref="pop_up_style" :style="{width: screenWidth + 'px'}">
+    <div class="pop_up" ref="pop_up_style">
       <div class="pop_head"
         @click="back">
         <el-button type="primary"> 返 回 </el-button>
@@ -41,25 +41,8 @@ export default {
   created () {
   },
   mounted () {
-    const that = this
-    window.onresize = () => {
-      return (() => {
-        window.screenWidth = document.body.clientWidth
-        that.screenWidth = window.screenWidth - 478
-      })()
-    }
   },
   watch: {
-    screenWidth (val) {
-      if (!this.timer) {
-        this.screenWidth = val
-        this.timer = true
-        let that = this
-        setTimeout(function () {
-          that.timer = false
-        }, 400)
-      }
-    }
   }
 }
 </script>
