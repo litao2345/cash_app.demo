@@ -1,41 +1,53 @@
 /**
- * [jsonp jsonp数据请求]
- * @param {[String]} url   [路径]
- * @param {[Object]} datas [传参]
- * @param {[Object]} $this [Vue对象]
- * @return {[Promise]} promise [回调对象]
+ * [util 公共方法类]
  */
-const jsonp = (url, datas, $this) => {
-  if (!datas.account && !datas.password) {
-    datas.a = $this.ACCOUNT
-    datas.p = $this.PASSWORD
-    datas.shop_id = $this.SHOPID
-  }
+const util = {
+  /**
+   * [jsonp 网络请求]
+   * @param {[String]} url   [路径]
+   * @param {[Object]} datas [传参]
+   * @param {[Object]} that  [Vue大对象]
+   * @return {[Promise]} promise [实例化网络请求]
+   */
+  jsonp: (url, datas, that) => {
+    if (!datas.account && !datas.password) {
+      const $log = JSON.parse(sessionStorage.getItem('log'))
+      Object.assign(datas, $log)
+    }
 
-  const promise = new Promise((resolve, reject) => {
-    url = 'http://' + Release + 'cash.goonjin.com/api/' + url
-    $this.$http.jsonp(url, {params: datas}).then((rt) => {
-      if (rt.body.code === 0) {
-        resolve(rt.body.data)
-      } else if (rt.body.code === 503) {
-        localStorage.removeItem(Release + 'ACCOUNT')
-        localStorage.removeItem(Release + 'PASSWORD')
+    const promise = new Promise((resolve, reject) => {
+      url = window.Url + 'api/' + url
+      that.$http.jsonp(url, {params: datas}).then((rt) => {
+        if (rt.body.code === 0) {
+          resolve(rt.body.data)
+        } else {
+          that.lod = false
+          that.$notify.error({
+            title: '出错了',
+            message: rt.body.msg,
+            position: 'top-right',
+            offset: 100
+          })
 
-        location.reload()
-      } else {
-        $this.err = true
-        $this.errmsg = rt.body.msg
-        reject(rt.body.msg)
-      }
-    }, (xhr, type, errorThrown) => {
-      $this.err = true
-      $this.errmsg = '网络异常，请在连接正常后重试'
-      reject(type)
+          reject(rt.body)
+        }
+      }, (xhr, type, errorThrown) => {
+        that.lod = false
+        that.$message({
+          type: 'error',
+          message: '网络异常，请在连接正常后重试',
+          showClose: true
+        })
+
+        reject(type)
+      })
     })
-  })
 
-  return promise
+    return promise
+  }
 }
+
+const jsonp = util.jsonp
 
 export {
   jsonp

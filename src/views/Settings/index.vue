@@ -7,11 +7,6 @@
         <router-link :key="ix" :to="{path: it.path}"
           v-for="(it, ix) of item.children">{{it.name}}</router-link>
       </div>
-      <div>
-        Clicked: {{count}} times
-        <button @click="increment">+</button>
-        <button @click="decrement">-</button>
-      </div>
     </div>
     <div class="main">
       <transition name="fade" mode="out-in">
@@ -35,14 +30,10 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'count',
-      'settings'
     ])
   },
   methods: {
     ...mapActions([
-      'increment',
-      'decrement'
     ])
   },
   created () {

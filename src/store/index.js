@@ -8,7 +8,39 @@ import * as getters from './getters'
 Vue.use(Vuex)
 
 const state = {
-  Count: 10,
+  /**
+   * [Sync 数据同步]
+   */
+  Sync: {
+    /**
+     * 初始化
+     */
+    init: [
+      {name: '基础配置'},
+      {name: '系统设置', db: 'cash_conf'}
+    ],
+    /**
+     * 请求
+     */
+    requests: [
+      {name: '店铺广告图', url: 'getShopAdv', db: 'adv_img', sync: 'adv'},
+      {name: '店铺活动信息', url: 'getDiscountProgram'},
+      {name: '积分兑换商品列表', url: 'getExchangeGoods'},
+      {name: '餐桌分类列表', url: 'getShopTableCate', chinese_restaurant: true},
+      {name: '餐桌列表', url: 'getShopTables', chinese_restaurant: true},
+      {name: '商品分类列表', url: 'getCashGoodsCate', db: 'goods_cate', sync: 'goods_cate'},
+      {name: '商品单位列表', url: 'getCashGoodsUnit', db: 'goods_unit', sync: 'goods_unit'},
+      {name: '商品列表', url: 'getCashGoods', db: 'goods', sync: 'goods'},
+      {name: '订单列表', url: 'get_shop_order', db: 'orders', sync: 'orders'}
+    ],
+    /**
+     * 上传
+     */
+    uploads: [
+      {name: '订单列表', url: 'create_order'},
+      {name: '交班信息', url: 'set_cashier_log'}
+    ]
+  },
 
   /**
    * [Userinfo 用户信息]
@@ -16,9 +48,19 @@ const state = {
   Userinfo: {},
 
   /**
+   * [Shops 店铺列表]
+   */
+  Shops: [],
+
+  /**
    * [Powers 权限]
    */
   Powers: [],
+
+  /**
+   * [Activity 活动信息]
+   */
+  Activity: [],
 
   /**
    * [Settings 配置]

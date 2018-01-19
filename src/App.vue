@@ -18,16 +18,18 @@ export default {
  */
 html,
 body{height:100%;overflow:hidden;}
-body{margin:0;background-color:#F2F2F2;}
+body{margin:0;background-color:#F2F2F2;color:#1D1D1D;}
 
 ::-webkit-scrollbar{width:0;height:0;}
+
+*{margin:0;padding:0;}
 
 li{list-style:none;}
 a,
 a:link,
 a:hover,
 a:active,
-a:visited{color:#222;text-decoration:none;}
+a:visited{color:#1D1D1D;text-decoration:none;}
 
 p{margin:0;}
 
@@ -66,6 +68,8 @@ textarea{resize:none;}
 /**
  * 重置
  */
+.el-input__inner{border-color:#C8C8C8;}
+.el-input__inner::-webkit-input-placeholder{color:#8C8C8C;}
 
 /**
  * 其它
@@ -75,4 +79,23 @@ textarea{resize:none;}
 .r{float:right;}
 
 .blank{padding:20px 0;color:#777;font-size:15px;line-height:40px;text-align:center;}
+
+/**
+ * ProgresSive-Image控件
+ */
+.progressive{height:100%;overflow:hidden;position:relative;}
+.progressive img{width:100%;height:100%;display:block;border:none;}
+.progressive img.preview{filter:blur(2vw);transform:scale(1.05);}
+.progressive img.hide{opacity:0;}
+.progressive img.origin{position:absolute;left:0;top:0;animation:origin 1.5s ease-out;}
+.progressive img.origin-scale{position:absolute;left:0;top:0;animation:origin-scale 1s ease-out;}
+
+@-webkit-keyframes origin{
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+@-webkit-keyframes origin-scale{
+  0% {opacity:0;transform:scale(1.1);}
+  100% {opacity:1;transform:scale(1);}
+}
 </style>

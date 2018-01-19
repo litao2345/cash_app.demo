@@ -1,5 +1,23 @@
-const count = state => {
-  return state.Count
+/**
+ * [sync 数据同步]
+ */
+const sync = state => {
+  return state.Sync
+}
+
+// 初始化
+const init = state => {
+  return state.Sync.init
+}
+
+// 请求
+const requests = state => {
+  return state.Sync.requests
+}
+
+// 上传
+const uploads = state => {
+  return state.Sync.uploads
 }
 
 /**
@@ -10,11 +28,24 @@ const userinfo = state => {
 }
 
 /**
+ * [shops 店铺列表]
+ */
+const shops = state => {
+  return state.Shops
+}
+
+/**
  * [powers 权限]
  */
-// 权限
 const powers = state => {
   return state.Powers
+}
+
+/**
+ * [activity 店铺活动信息]
+ */
+const activity = state => {
+  return state.Activity
 }
 
 /**
@@ -80,8 +111,10 @@ const us = state => {
 }
 
 export {
-  count,
+  sync, init, requests, uploads,
   userinfo,
+  shops,
   powers,
+  activity,
   settings, base, basic, back, tips, record, print, category, other, shop, system, us
 }
