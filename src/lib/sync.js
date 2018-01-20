@@ -1,12 +1,8 @@
-import {database, define, drop} from '@/lib/websql'
+import {_sync} from '@/lib/util'
+import {_define, _drop, _del, _save, _get} from '@/lib/websql'
 
 const del = 0
-if (del) drop()
-
-/**
- * [window 全局参数]
- */
-const URL = window.Url + 'api/'
+if (del) _drop()
 
 /**
  * [sync 数据同步类]
@@ -14,37 +10,25 @@ const URL = window.Url + 'api/'
 const sync = {
   /**
    * [online 同步线上数据]
-   * @param {[Array]}  requests [请求队列]
-   * @param {[Object]} steps    [同步进度]
-   * @param {[Object]} that     [Vue大对象]
+   * @param {[Array]}    requests [请求队列]
+   * @param {[Function]} http     [网络请求]
+   * @param {[Object]}   steps    [同步进度]
    * @return {[Object]} [同步进度]
    */
-  online: async (requests, steps, that) => {
+  online: async (requests, http, steps) => {
     steps.name = '正在初始化基础配置'
-    const d = await define()
-    if (!d) {
+    let r = await _define()
+    if (!r) {
       steps.name = '初始化失败，请检查系统环境'
-      return
+      return r
     }
 
     const max = requests.length
-    const $log = JSON.parse(sessionStorage.getItem('log'))
     for (let item of requests) {
       try {
         steps.name = '正在同步数据：' + item.name
 
-        const r = await new Promise((resolve, reject) => {
-          const url = URL + item.url
-          that.$http.jsonp(url, {params: $log}).then((rt) => {
-            if (rt.body.code === 0) {
-              resolve(rt.body.data)
-            } else {
-              reject(rt.body)
-            }
-          }, (xhr, type, errorThrown) => {
-            reject(type)
-          })
-        })
+        r = await sync[item.sync](item, http)
 
         const index = requests.indexOf(item) + 1
         steps.percent = parseInt((index / max) * 100)
@@ -54,276 +38,317 @@ const sync = {
         console.log(index, item.name, r)
       } catch (err) {
         steps.name = '同步失败，请检查网络环境'
-        break
+        return false
       }
     }
   },
 
   /**
-   * [adv 店铺广告图]
-   * @param {[Object]} datas [传参]
-   * @return {[]} []
+   * [get_time 查询同步时间戳]
+   * @param {[String]} value [字段值]
+   * @return {[Object]} [同步时间戳]
    */
-  adv: async (that) => {
-    const db = database()
-    let tb = db.instance('sync_time')
+  get_time: async (value, type) => {
     let $d = {
       last_time: 0
     }
 
-    const off = await tb.get('key="sync_adv"', (row) => {
-      if (row.length) $d.last_time = row[0]['sync_time']
-    })
-    console.log(off)
+    const r = await _get('sync_time', ('key="' + value + '"'))
+    if (!r) {
+      return r
+    } else {
+      if (r.length) $d.last_time = r[0]['sync_time']
+    }
 
-    Object.assign($d, JSON.parse(sessionStorage.getItem('log')))
-    const on = await new Promise((resolve, reject) => {
-      const url = URL + 'getShopAdv'
-      that.$http.jsonp(url, {params: $d}).then((rt) => {
-        if (rt.body.code === 0) {
-          resolve(rt.body.data)
-        } else {
-          reject(rt.body)
+    return $d
+  },
+
+  /**
+   * [save_time 更新同步时间戳]
+   * @param {[String]} value     [字段值]
+   * @param {[String]} timestamp [同步时间戳]
+   * @return {[Boolean]} [结果返回值]
+   */
+  save_time: async (value, timestamp) => {
+    const data = {
+      'key': value,
+      'sync_time': timestamp
+    }
+    return _save('sync_time', data, 'key')
+  },
+
+  /**
+   * [sync_adv 店铺广告图]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_adv: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
+
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.adv)
+      if (!rt.adv.length) return true // 返回为空
+    } catch (err) {
+      return false
+    }
+
+    let data
+    for (let item of rt.adv) {
+      if (parseInt(item.is_del) === 1 || parseInt(item.state) === 0) {
+        // 删除店铺广告图
+        const r = await _del(request.db, ('id="' + item.id + '"'))
+        if (!r) return r
+      } else {
+        // 更新店铺广告图
+        data = {
+          id: item.id,
+          img: item.img,
+          number: item.number
         }
-      }, (xhr, type, errorThrown) => {
-        reject(type)
-      })
-    })
-    console.log(on)
-
-    window.core.ajax('getShopAdv', $d, 'GET', (rt) => {
-      if (rt.body.data.adv) {
-        tb = db.instance('adv_img')
-        for (let i = 0; i < rt.data.adv.length; i++) {
-          let item = rt.data.adv[i]
-
-          if (parseInt(item.is_del) === 1 || parseInt(item.state) === 0) {
-            db.del('adv_img', 'id=' + item.id)
-          } else {
-            const data = {
-              id: item.id,
-              img: item.img,
-              number: item.number
-            }
-            db.save('adv_img', data, 'id')
-          }
-        }
+        const r = await _save(request.db, data, 'id')
+        if (!r) return r
       }
+    }
 
-      tb = db.instance('sync_time')
-      tb.save('sync_time', {'sync_time': rt.data.time, 'key': 'sync_adv'}, 'key')
-    })
+    return sync.save_time(request.sync, rt.time)
   },
 
-  // 店铺活动信息
-  activity: (cbk) => {
-    window.core.ajax('getDiscountProgram', {}, 'GET', (rt) => {
-      // if (rt.data) {
-      //     window.activity = rt.data.activity
-      //     window.goods_activity = rt.data.goods_activity
-      // }
+  /**
+   * [sync_activity 店铺活动信息]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_activity: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
 
-      if (cbk) cbk()
-    })
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.activity, rt.goods_activity)
+    } catch (err) {
+      return false
+    }
+
+    return sync.save_time(request.sync, rt.time)
   },
 
-  // 积分兑换商品列表
-  gift: (cb) => {
-    window.core.ajax('getExchangeGoods', {}, 'GET', (rt) => {
-      if (rt.data) window.gift = rt.data.list
+  /**
+   * [sync_gift 积分兑换商品列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_gift: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
 
-      if (cb) cb()
-    })
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.list)
+    } catch (err) {
+      return false
+    }
+
+    return sync.save_time(request.sync, rt.time)
   },
 
-  goods_cate: (cb) => {
-    const db = database()
-    db.get('sync_time', 'key="sync_goods_cate"', (row) => {
-      let lastTime = 0
-      if (row.length > 0) {
-        lastTime = row[0].sync_time
-      }
+  /**
+   * [sync_goods_cate 商品分类列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_goods_cate: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
 
-      window.core.ajax('getCashGoodsCate', {last_time: lastTime}, 'GET', (rt) => {
-        if (rt.data.cates) {
-          for (let i = 0; i < rt.data.cates.length; i++) {
-            const item = rt.data.cates[i]
-            if (item.state === 1) {
-              db.del('goods_cate', 'cate_id=' + item.id)
-            } else {
-              const data = {
-                cate_id: item.id,
-                name: item.name,
-                pid: item.pid,
-                create_time: item.create_time,
-                update_time: item.create_time
-              }
-              db.save('goods_cate', data, 'cate_id')
-            }
-          }
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.cates)
+      if (!rt.cates.length) return true // 返回为空
+    } catch (err) {
+      return false
+    }
 
-          db.save('sync_time', {'sync_time': rt.data.time, 'key': 'sync_goods_cate'}, 'key')
+    let data
+    for (let item of rt.cates) {
+      if (parseInt(item.state) === 1) {
+        // 删除商品分类列表
+        const r = await _del(request.db, ('cate_id="' + item.id + '"'))
+        if (!r) return r
+      } else {
+        // 更新商品分类列表
+        data = {
+          cate_id: item.id,
+          name: item.name,
+          pid: item.pid,
+          create_time: item.create_time,
+          update_time: item.create_time
         }
+        const r = await _save(request.db, data, 'cate_id')
+        if (!r) return r
+      }
+    }
 
-        if (cb) cb()
-      })
-    })
+    return sync.save_time(request.sync, rt.time)
   },
 
-  goods_unit: (cb) => {
-    const db = database()
-    window.core.ajax('getCashGoodsUnit', {}, 'GET', (rt) => {
-      if (rt.data) {
-        for (let i = 0; i < rt.data.length; i++) {
-          const item = rt.data[i]
-          const data = {
-            id: item.id,
-            name: item.name
-          }
-          db.save('goods_unit', data, 'id')
-        }
-      }
+  /**
+   * [sync_goods_unit 商品单位列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_goods_unit: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
 
-      if (cb) cb()
-    })
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt)
+      if (!rt.length) return true // 返回为空
+    } catch (err) {
+      return false
+    }
+
+    let data
+    for (let item of rt) {
+      // 更新商品单位列表
+      data = {
+        id: item.id,
+        name: item.name
+      }
+      const r = await _save(request.db, data, 'id')
+      if (!r) return r
+    }
+
+    return sync.save_time(request.sync, parseInt(new Date().getTime() / 1000))
   },
 
-  goods: (cb) => {
-    const db = database()
-    db.get('sync_time', 'key="sync_goods"', (row) => {
-      let lastTime = 0
-      if (row.length > 0) {
-        lastTime = row[0].sync_time
+  /**
+   * [sync_goods 商品列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_goods: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
+
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.goods)
+      if (!rt.goods.length) return true // 返回为空
+    } catch (err) {
+      return false
+    }
+
+    let data
+    for (let item of rt.goods) {
+      // 更新商品列表
+      data = {
+        goods_id: item.id,
+        code: item.code,
+        name: item.name,
+        price: item.price,
+        img: item.img,
+        description: item.description,
+        py: item.py,
+        cate_id: item.cate_id,
+        cate_name: item.cate_name,
+        unit_id: item.unit_id,
+        unit_name: item.unit_name,
+        goods_cate: item.goods_cate,
+        print_tag: item.print_tag,
+        property: JSON.stringify(item.property),
+        format: JSON.stringify(item.format),
+        is_weight: item.is_weight,
+        is_del: item.is_del,
+        create_time: item.create_time,
+        update_time: item.update_time
       }
+      const r = await _save(request.db, data, 'goods_id')
+      if (!r) return r
+    }
 
-      window.core.ajax('getCashGoods', {last_time: lastTime}, 'GET', (rt) => {
-        let list = []
+    // 更新基础配置
+    const diff = new Date().getTime() - (rt.time * 1000)
+    data = {
+      'name': 'diff_time',
+      'val': diff
+    }
+    const r = await _save('cash_conf', data, 'name')
+    if (!r) return r
 
-        if (rt.data.goods) {
-          if (!lastTime) {
-            // 全量更新
-            for (let i = 0; i < rt.data.goods.length; i++) {
-              let item = rt.data.goods[i]
-
-              list.push({
-                goods_id: item.id,
-                code: item.code,
-                name: item.name,
-                py: item.py,
-                img: item.img,
-                cate_id: item.cate_id,
-                cate_name: item.cate_name,
-                unit_id: item.unit_id,
-                unit_name: item.unit_name,
-                price: item.price,
-                description: item.description,
-                create_time: item.create_time,
-                update_time: item.create_time,
-                is_del: 0,
-                print_tag: item.print_tag,
-                goods_cate: item.goods_cate,
-                property: JSON.stringify(item.property),
-                format: JSON.stringify(item.format),
-                is_weight: item.is_weight
-              })
-            }
-
-            for (let i = 0; i < list.length; i++) {
-              db.insert('goods', list[i])
-            }
-          } else {
-            for (let i = 0; i < rt.data.goods.length; i++) {
-              let item = rt.data.goods[i]
-
-              if (item.is_del === '1' || item.state !== '1') {
-                db.save('goods', {goods_id: item.id, is_del: 1}, 'goods_id')
-              } else {
-                const goodsDatas = {
-                  goods_id: item.id,
-                  code: item.code,
-                  name: item.name,
-                  py: item.py,
-                  img: item.img,
-                  cate_id: item.cate_id,
-                  cate_name: item.cate_name,
-                  unit_id: item.unit_id,
-                  unit_name: item.unit_name,
-                  price: item.price,
-                  description: item.description,
-                  create_time: item.create_time,
-                  update_time: item.update_time,
-                  print_tag: item.print_tag,
-                  goods_cate: item.goods_cate,
-                  property: JSON.stringify(item.property),
-                  format: JSON.stringify(item.format),
-                  is_weight: item.is_weight
-                }
-
-                db.save('goods', goodsDatas, 'goods_id')
-              }
-            }
-          }
-
-          db.save('sync_time', {'sync_time': rt.data.time, 'key': 'sync_goods'}, 'key')
-          const diff = new Date().getTime() - (rt.data.time * 1000)
-          db.save('cash_conf', {'name': 'diff_time', 'val': diff}, 'name')
-          window.core.diff_time = diff
-          console.log('与服务器时间差:' + diff)
-
-          if (cb) cb()
-        }
-      })
-    })
+    return sync.save_time(request.sync, rt.time)
   },
 
-  orders: (cb) => {
-    const db = database()
-    db.get('sync_time', 'key="sync_orders"', (row) => {
-      let lastTime = 0
-      if (row.length > 0) {
-        lastTime = row[0].sync_time
+  /**
+   * [sync_orders 订单列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_orders: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
+
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.orders)
+      if (!rt.orders.length) return true // 返回为空
+    } catch (err) {
+      return false
+    }
+
+    let data
+    for (let item of rt.orders) {
+      // 更新商品列表
+      data = {
+        local_order_no: item.local_order_no,
+        order_no: item.order_no,
+        money: item.money,
+        real_pay_money: item.real_pay_money,
+        change_money: item.change_money,
+        uncleared_money: item.uncleared_money,
+        goods: item.goods,
+        uid: item.manager_uid,
+        pay_type: item.pay_type,
+        pay_state: item.pay_state,
+        order_cate: item.order_cate,
+        card_no: item.card_no,
+        remarks: item.remarks,
+        state: item.state,
+        sync: 1,
+        create_time: item.create_time
       }
+      const r = await _save(request.db, data, 'order_no')
+      if (!r) return r
+    }
 
-      window.core.ajax('get_shop_order', {last_time: lastTime}, 'GET', (rt) => {
-        let list = []
-
-        if (rt.data.orders) {
-          for (let i = 0; i < rt.data.orders.length; i++) {
-            const item = rt.data.orders[i]
-            list.push({
-              local_order_no: item.local_order_no,
-              order_no: item.order_no,
-              money: item.money,
-              real_pay_money: item.real_pay_money,
-              change_money: item.change_money,
-              goods: item.goods,
-              uid: item.manager_uid,
-              create_time: item.create_time,
-              state: item.state,
-              pay_type: item.pay_type,
-              sync: 1,
-              pay_state: item.pay_state,
-              order_cate: item.order_cate,
-              remarks: item.remarks,
-              card_no: item.card_no,
-              uncleared_money: item.uncleared_money
-            })
-          }
-
-          for (let i = 0; i < list.length; i++) {
-            db.save('orders', list[i], 'order_no')
-          }
-
-          db.save('sync_time', {'sync_time': rt.data.time, 'key': 'sync_orders'}, 'key')
-        }
-
-        if (cb) cb()
-      })
-    })
+    return sync.save_time(request.sync, rt.time)
   }
 
   // register_device: (cb) => {
-  //   const db = database()
+  //   const db = _database()
   //   db.get('cash_conf', 'name="device"', (row) => {
   //     if (row !== null && row.length > 0) {
   //       if (cb) cb()
@@ -343,7 +368,7 @@ const sync = {
   // },
 
   // kds: (cb) => {
-  //   const db = database()
+  //   const db = _database()
   //   const kdsIpds = window.GetKdsIp()
   //   if (kdsIpds.length) {
   //     db.get('goods', 'is_del=0 OR is_del IS NULL', (rows) => {
@@ -426,8 +451,8 @@ const sync = {
   // }
 }
 
-const online = sync.online
+const _online = sync.online
 
 export {
-  online
+  _online
 }

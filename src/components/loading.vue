@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {online} from '@/lib/sync'
+import {_online} from '@/lib/sync'
 
 import {mapGetters} from 'vuex'
 
@@ -36,7 +36,12 @@ export default {
   methods: {
   },
   created () {
-    online(this.requests, this.steps, this)
+    // 重组请求列表
+    let arr = []
+    for (let item of this.requests) {
+      if (item.sync) arr.push(item)
+    }
+    _online(arr, this.$http, this.steps)
   },
   mounted () {
   }

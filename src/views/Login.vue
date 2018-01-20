@@ -48,7 +48,7 @@
 
 <script>
 import iTEMLoading from '@/components/loading'
-import {jsonp} from '@/lib/util'
+import {_jsonp} from '@/lib/util'
 
 import md5 from 'js-md5'
 import {mapActions} from 'vuex'
@@ -115,7 +115,7 @@ export default {
           account: this.forms.account.replace(/(^\s*)|(\s*$)/g, ''),
           password: md5(this.forms.password)
         }
-        jsonp('checkLogin2', $d, this)
+        _jsonp('checkLogin2', $d, this)
         .then((rt) => {
           // 设置用户信息
           let $store = {

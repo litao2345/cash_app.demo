@@ -201,13 +201,13 @@ const websql = {
     let rt = keys.length === $sync[id].length
     if (rt) return rt // 数据表已全建
 
-    const db = database()
+    const db = _database()
     for (let index of keys) {
       try {
         // 数据表未建
         if ($sync[id].indexOf(index) === -1) {
           let item = websql.tables[index]
-          const r = await new Promise((resolve, reject) => {
+          const r = await new Promise((resolve) => {
             db.define(index, item, () => {
               resolve(index)
             })
@@ -230,22 +230,129 @@ const websql = {
    * [drop 删表]
    * @return {[]} []
    */
-  drop: () => {
-    const db = database()
+  drop: async () => {
+    const db = _database()
     for (let index of Object.keys(websql.tables)) {
-      db.drop(index)
+      await db.drop(index)
     }
 
     localStorage.removeItem('sync')
+  },
+
+  /**
+   * [insert 添加]
+   * @param {[String]} name [表名]
+   * @param {[Object]} data [数据]
+   * @return {[Boolean]} [结果返回值]
+   */
+  insert: async (name, data) => {
+    const db = _database()
+    const tb = db.instance(name)
+
+    try {
+      await new Promise((resolve) => {
+        tb.save(data, (row) => {
+          resolve(row)
+        })
+      })
+
+      return true
+    } catch (err) {
+      return false
+    }
+  },
+
+  /**
+   * [del 删除]
+   * @param {[String]} name      [表名]
+   * @param {[String]} condition [条件]
+   * @return {[Boolean]} [结果返回值]
+   */
+  del: async (name, condition) => {
+    // 数据是否存在
+    let rt = await _get(name, condition)
+    if (!rt) {
+      return rt
+    } else {
+      if (!rt.length) return true
+    }
+
+    const db = _database()
+    const tb = db.instance(name)
+
+    try {
+      await new Promise((resolve) => {
+        tb.del(condition, (row) => {
+          resolve(row)
+        })
+      })
+
+      return true
+    } catch (err) {
+      return false
+    }
+  },
+
+  /**
+   * [save 更新]
+   * @param {[String]} name  [表名]
+   * @param {[Object]} data  [数据]
+   * @param {[String]} field [字段]
+   * @return {[Boolean]} [结果返回值]
+   */
+  save: async (name, data, field) => {
+    const db = _database()
+    const tb = db.instance(name)
+
+    try {
+      await new Promise((resolve) => {
+        tb.save(data, field, (row) => {
+          resolve(row)
+        })
+      })
+
+      return true
+    } catch (err) {
+      return false
+    }
+  },
+
+  /**
+   * [get 查询]
+   * @param {[String]} name      [表名]
+   * @param {[String]} condition [条件]
+   * @return {[Array]} [查询结果]
+   */
+  get: async (name, condition) => {
+    const db = _database()
+    const tb = db.instance(name)
+
+    try {
+      const rt = await new Promise((resolve) => {
+        tb.get(condition, (row) => {
+          resolve(row)
+        })
+      })
+
+      return rt
+    } catch (err) {
+      return false
+    }
   }
 }
 
-const database = websql.database
-const define = websql.define
-const drop = websql.drop
+const _database = websql.database
+const _define = websql.define
+const _drop = websql.drop
+const _del = websql.del
+const _save = websql.save
+const _get = websql.get
 
 export {
-  database,
-  define,
-  drop
+  _database,
+  _define,
+  _drop,
+  _del,
+  _save,
+  _get
 }

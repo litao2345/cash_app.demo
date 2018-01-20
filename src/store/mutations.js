@@ -9,7 +9,7 @@ const userinfoSETS = (state, datas) => {
  * [shops 店铺列表]
  */
 const shopsSETS = (state, datas) => {
-  state.Powers = datas.split(',')
+  state.Powers = datas
 }
 
 /**

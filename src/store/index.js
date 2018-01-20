@@ -23,15 +23,15 @@ const state = {
      * 请求
      */
     requests: [
-      {name: '店铺广告图', url: 'getShopAdv', db: 'adv_img', sync: 'adv'},
-      {name: '店铺活动信息', url: 'getDiscountProgram'},
-      {name: '积分兑换商品列表', url: 'getExchangeGoods'},
+      {name: '店铺广告图', url: 'getShopAdv', db: 'adv_img', sync: 'sync_adv'},
+      {name: '店铺活动信息', url: 'getDiscountProgram', db: '', sync: 'sync_activity'},
+      {name: '积分兑换商品列表', url: 'getExchangeGoods', db: '', sync: 'sync_gift'},
       {name: '餐桌分类列表', url: 'getShopTableCate', chinese_restaurant: true},
       {name: '餐桌列表', url: 'getShopTables', chinese_restaurant: true},
-      {name: '商品分类列表', url: 'getCashGoodsCate', db: 'goods_cate', sync: 'goods_cate'},
-      {name: '商品单位列表', url: 'getCashGoodsUnit', db: 'goods_unit', sync: 'goods_unit'},
-      {name: '商品列表', url: 'getCashGoods', db: 'goods', sync: 'goods'},
-      {name: '订单列表', url: 'get_shop_order', db: 'orders', sync: 'orders'}
+      {name: '商品分类列表', url: 'getCashGoodsCate', db: 'goods_cate', sync: 'sync_goods_cate'},
+      {name: '商品单位列表', url: 'getCashGoodsUnit', db: 'goods_unit', sync: 'sync_goods_unit'},
+      {name: '商品列表', url: 'getCashGoods', db: 'goods', sync: 'sync_goods'},
+      {name: '订单列表', url: 'get_shop_order', db: 'orders', sync: 'sync_orders'}
     ],
     /**
      * 上传
