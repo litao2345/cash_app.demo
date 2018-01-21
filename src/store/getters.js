@@ -20,6 +20,11 @@ const uploads = state => {
   return state.Sync.uploads
 }
 
+// 接口
+const inters = state => {
+  return state.Sync.inters
+}
+
 /**
  * [userinfo 用户信息]
  */
@@ -75,7 +80,7 @@ const tips = state => {
   return state.Settings.tips
 }
 
-// 配置发票打印机
+// 配置小票打印机
 const record = state => {
   return state.Settings.record
 }
@@ -111,7 +116,7 @@ const us = state => {
 }
 
 export {
-  sync, init, requests, uploads,
+  sync, init, requests, uploads, inters,
   userinfo,
   shops,
   powers,

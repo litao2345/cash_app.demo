@@ -16,29 +16,40 @@ const state = {
      * 初始化
      */
     init: [
-      {name: '基础配置'},
-      {name: '系统设置', db: 'cash_conf'}
+      {name: '基础配置', init: 'init_base'},
+      {name: '系统设置', db: 'cash_conf', init: 'init_conf'},
+      {name: '交班状态', db: 'work_log', init: 'init_work'}
     ],
+
     /**
      * 请求
      */
     requests: [
       {name: '店铺广告图', url: 'getShopAdv', db: 'adv_img', sync: 'sync_adv'},
-      {name: '店铺活动信息', url: 'getDiscountProgram', db: '', sync: 'sync_activity'},
-      {name: '积分兑换商品列表', url: 'getExchangeGoods', db: '', sync: 'sync_gift'},
-      {name: '餐桌分类列表', url: 'getShopTableCate', chinese_restaurant: true},
-      {name: '餐桌列表', url: 'getShopTables', chinese_restaurant: true},
+      {name: '店铺活动信息', url: 'getDiscountProgram', db: 'activity', sync: 'sync_activity'},
+      {name: '餐桌分类列表', url: 'getShopTableCate', db: 'desks_cate', sync: 'sync_desks_cate'},
+      {name: '餐桌列表', url: 'getShopTables', db: 'desks', sync: 'sync_desks'},
       {name: '商品分类列表', url: 'getCashGoodsCate', db: 'goods_cate', sync: 'sync_goods_cate'},
       {name: '商品单位列表', url: 'getCashGoodsUnit', db: 'goods_unit', sync: 'sync_goods_unit'},
       {name: '商品列表', url: 'getCashGoods', db: 'goods', sync: 'sync_goods'},
-      {name: '订单列表', url: 'get_shop_order', db: 'orders', sync: 'sync_orders'}
+      {name: '订单列表', url: 'get_shop_order', db: 'orders', sync: 'sync_orders'},
+
+      {name: '积分兑换商品列表', url: 'getExchangeGoods', sync: 'sync_gift'}
     ],
+
     /**
      * 上传
      */
     uploads: [
       {name: '订单列表', url: 'create_order'},
       {name: '交班信息', url: 'set_cashier_log'}
+    ],
+
+    /**
+     * 接口
+     */
+    inters: [
+      {name: '客户端基本信息', sync: 'sync_client'}
     ]
   },
 
@@ -106,7 +117,7 @@ const state = {
     },
 
     /**
-     * 配置发票打印机
+     * 配置小票打印机
      */
     record: {
       numbers: 1 // 打印份数

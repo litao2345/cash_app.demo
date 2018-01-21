@@ -9,38 +9,51 @@ if (del) _drop()
  */
 const sync = {
   /**
+   * [init 初始化本地环境]
+   * @param {[Array]}  inits [初始化队列]
+   * @param {[Object]} steps [同步进度]
+   * @return {[Boolean]} [结果返回值]
+   */
+  init: async (inits, steps) => {
+    for (let item of inits) {
+      if (steps) steps.name = '正在初始化：' + item.name
+      let r = await sync[item.init]
+      if (!r) return false
+    }
+
+    return true
+  },
+
+  /**
    * [online 同步线上数据]
    * @param {[Array]}    requests [请求队列]
    * @param {[Function]} http     [网络请求]
    * @param {[Object]}   steps    [同步进度]
-   * @return {[Object]} [同步进度]
+   * @return {[Boolean]} [结果返回值]
    */
   online: async (requests, http, steps) => {
-    steps.name = '正在初始化基础配置'
-    let r = await _define()
-    if (!r) {
-      steps.name = '初始化失败，请检查系统环境'
-      return r
-    }
-
     const max = requests.length
     for (let item of requests) {
       try {
-        steps.name = '正在同步数据：' + item.name
+        if (steps) steps.name = '正在同步数据：' + item.name
 
-        r = await sync[item.sync](item, http)
+        await sync[item.sync](item, http)
 
         const index = requests.indexOf(item) + 1
-        steps.percent = parseInt((index / max) * 100)
-
-        if (max === index) steps.name = '正在为您载入界面，请稍后'
-
-        console.log(index, item.name, r)
+        if (steps) steps.percent = parseInt((index / max) * 100)
       } catch (err) {
-        steps.name = '同步失败，请检查网络环境'
         return false
       }
     }
+
+    return true
+  },
+
+  /**
+   * [offline 上传本地数据]
+   * @return {[Boolean]} [结果返回值]
+   */
+  offline: async () => {
   },
 
   /**
@@ -78,6 +91,15 @@ const sync = {
   },
 
   /**
+   * [init_base 基础配置]
+   * @return {[Boolean]} [结果返回值]
+   */
+  init_base: async () => {
+    let r = await _define()
+    return r
+  },
+
+  /**
    * [sync_adv 店铺广告图]
    * @param {[Object]}   request [请求]
    * @param {[Function]} http    [网络请求]
@@ -106,7 +128,7 @@ const sync = {
       } else {
         // 更新店铺广告图
         data = {
-          id: item.id,
+          adv_id: item.id,
           img: item.img,
           number: item.number
         }
@@ -114,6 +136,14 @@ const sync = {
         if (!r) return r
       }
     }
+
+    // 更新基础配置
+    data = {
+      'name': 'diff_time',
+      'val': new Date().getTime() - (rt.time * 1000)
+    }
+    const r = await _save('cash_conf', data, 'name')
+    if (!r) return r
 
     return sync.save_time(request.sync, rt.time)
   },
@@ -125,28 +155,30 @@ const sync = {
    * @return {[Boolean]} [结果返回值]
    */
   sync_activity: async (request, http) => {
-    const $d = await sync.get_time(request.sync)
-    if (!$d) return false
-
     // 同步数据
     let rt
     try {
-      rt = await _sync(request.url, $d, http)
+      rt = await _sync(request.url, {}, http)
       console.log('return', rt.activity, rt.goods_activity)
     } catch (err) {
       return false
     }
 
-    return sync.save_time(request.sync, rt.time)
+    const data = {
+      id: 1,
+      activity: JSON.stringify(rt.activity),
+      goods_activity: JSON.stringify(rt.goods_activity)
+    }
+    return _save(request.db, data, 'id')
   },
 
   /**
-   * [sync_gift 积分兑换商品列表]
+   * [sync_desks_cate 餐桌分类列表]
    * @param {[Object]}   request [请求]
    * @param {[Function]} http    [网络请求]
    * @return {[Boolean]} [结果返回值]
    */
-  sync_gift: async (request, http) => {
+  sync_desks_cate: async (request, http) => {
     const $d = await sync.get_time(request.sync)
     if (!$d) return false
 
@@ -155,8 +187,74 @@ const sync = {
     try {
       rt = await _sync(request.url, $d, http)
       console.log('return', rt.list)
+      if (!rt.list.length) return true // 返回为空
     } catch (err) {
       return false
+    }
+
+    let data
+    for (let item of rt.list) {
+      if (parseInt(item.is_del) === 1) {
+        // 删除餐桌分类列表
+        const r = await _del(request.db, ('cate_id="' + item.id + '"'))
+        if (!r) return r
+      } else {
+        // 更新餐桌分类列表
+        data = {
+          cate_id: item.id,
+          name: item.name,
+          create_time: item.create_time,
+          update_time: item.update_time
+        }
+        const r = await _save(request.db, data, 'cate_id')
+        if (!r) return r
+      }
+    }
+
+    return sync.save_time(request.sync, rt.time)
+  },
+
+  /**
+   * [sync_desks 餐桌列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_desks: async (request, http) => {
+    const $d = await sync.get_time(request.sync)
+    if (!$d) return false
+
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, $d, http)
+      console.log('return', rt.tables)
+      if (!rt.tables.length) return true // 返回为空
+    } catch (err) {
+      return false
+    }
+
+    let data
+    for (let item of rt.tables) {
+      if (parseInt(item.is_del) === 1) {
+        // 删除餐桌列表
+        const r = await _del(request.db, ('desks_id="' + item.id + '"'))
+        if (!r) return r
+      } else {
+        // 更新餐桌列表
+        data = {
+          desks_id: item.id,
+          name: item.name,
+          seat_cnt: item.seat_cnt,
+          cate_id: item.cate_id,
+          state: item.state,
+          table_order_id: item.table_order_id,
+          create_time: item.create_time,
+          update_time: item.update_time
+        }
+        const r = await _save(request.db, data, 'desks_id')
+        if (!r) return r
+      }
     }
 
     return sync.save_time(request.sync, rt.time)
@@ -195,7 +293,7 @@ const sync = {
           name: item.name,
           pid: item.pid,
           create_time: item.create_time,
-          update_time: item.create_time
+          update_time: item.update_time
         }
         const r = await _save(request.db, data, 'cate_id')
         if (!r) return r
@@ -287,15 +385,6 @@ const sync = {
       if (!r) return r
     }
 
-    // 更新基础配置
-    const diff = new Date().getTime() - (rt.time * 1000)
-    data = {
-      'name': 'diff_time',
-      'val': diff
-    }
-    const r = await _save('cash_conf', data, 'name')
-    if (!r) return r
-
     return sync.save_time(request.sync, rt.time)
   },
 
@@ -321,10 +410,11 @@ const sync = {
 
     let data
     for (let item of rt.orders) {
-      // 更新商品列表
+      // 更新订单列表
       data = {
         local_order_no: item.local_order_no,
         order_no: item.order_no,
+        order_cate: item.order_cate,
         money: item.money,
         real_pay_money: item.real_pay_money,
         change_money: item.change_money,
@@ -333,7 +423,6 @@ const sync = {
         uid: item.manager_uid,
         pay_type: item.pay_type,
         pay_state: item.pay_state,
-        order_cate: item.order_cate,
         card_no: item.card_no,
         remarks: item.remarks,
         state: item.state,
@@ -345,6 +434,23 @@ const sync = {
     }
 
     return sync.save_time(request.sync, rt.time)
+  },
+
+  /**
+   * [sync_gift 积分兑换商品列表]
+   * @param {[Object]}   request [请求]
+   * @param {[Function]} http    [网络请求]
+   * @return {[Boolean]} [结果返回值]
+   */
+  sync_gift: async (request, http) => {
+    // 同步数据
+    let rt
+    try {
+      rt = await _sync(request.url, {}, http)
+      console.log('return', rt.list)
+    } catch (err) {
+      return false
+    }
   }
 
   // register_device: (cb) => {
@@ -451,8 +557,10 @@ const sync = {
   // }
 }
 
+const _init = sync.init
 const _online = sync.online
 
 export {
+  _init,
   _online
 }

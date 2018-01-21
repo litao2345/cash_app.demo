@@ -46,6 +46,7 @@ const util = {
 
     return promise
   },
+
   /**
    * [sync 数据同步]
    * @param {[String]}   url   [接口]

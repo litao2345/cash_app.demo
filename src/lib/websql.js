@@ -13,6 +13,32 @@ const websql = {
       img: 'TEXT',
       number: 'INTEGER'
     },
+    // 店铺活动信息
+    activity: {
+      id: 'INTEGER PRIMARY KEY',
+      activity: 'TEXT NOT NULL', // 活动列表：json数据
+      goods_activity: 'TEXT NOT NULL' // 商品活动列表：json数据
+    },
+    // 餐桌分类列表
+    desks_cate: {
+      id: 'INTEGER PRIMARY KEY',
+      cate_id: 'INTEGER', // 分类ID
+      name: 'TEXT NOT NULL', // 分类名
+      create_time: 'INTEGER',
+      update_time: 'INTEGER'
+    },
+    // 餐桌列表
+    desks: {
+      id: 'INTEGER PRIMARY KEY',
+      desks_id: 'INTEGER', // 餐桌ID
+      name: 'TEXT NOT NULL', // 餐桌名
+      seat_cnt: 'INTEGER', // 座位数
+      cate_id: 'INTEGER', // 餐桌分类
+      state: 'INTEGER', // 状态 (0空闲, 1开台, 2下单, 3加菜, 4减菜)
+      table_order_id: 'INTEGER', // 餐桌当前订单号
+      create_time: 'INTEGER',
+      update_time: 'INTEGER'
+    },
     // 商品分类列表
     goods_cate: {
       id: 'INTEGER PRIMARY KEY',
@@ -33,44 +59,65 @@ const websql = {
       goods_id: 'INTEGER',
       code: 'TEXT NOT NULL',
       name: 'TEXT NOT NULL',
+      price: 'FLOAT',
+      img: 'TEXT',
+      description: 'TEXT NOT NULL',
       py: 'VARCHAR(50)',
       cate_id: 'INTEGER',
       cate_name: 'VARCHAR(50)',
       unit_id: 'INTEGER',
       unit_name: 'TEXT NOT NULL',
-      price: 'FLOAT',
-      img: 'TEXT',
-      description: 'TEXT NOT NULL',
-      is_del: 'INTEGER', // 删除状态：0未删除、1已删除（包括已下架商品）
-      print_tag: 'INTEGER DEFAULT 0',
       goods_cate: 'INTEGER DEFAULT 0',
+      print_tag: 'INTEGER DEFAULT 0',
       property: 'TEXT',
       format: 'TEXT',
-      sort_number: 'INTEGER DEFAULT 0',
       is_weight: 'INTEGER DEFAULT 0',
+      is_del: 'INTEGER',
+      sort_number: 'INTEGER DEFAULT 0',
       create_time: 'INTEGER',
       update_time: 'INTEGER'
     },
     // 订单列表
     orders: {
       id: 'INTEGER PRIMARY KEY',
-      order_cate: 'INTEGER', // 订单类型
       local_order_no: 'VARCHAR(100)', // 本地订单号
       order_no: 'VARCHAR(100)', // 云端订单号
+      order_cate: 'INTEGER', // 订单类型
       money: 'FLOAT', // 总价
       real_pay_money: 'FLOAT', // 支付金额
       change_money: 'FLOAT', // 找零
+      discount_money: 'FLOAT',
+      uncleared_money: 'FLOAT',
       goods: 'TEXT NOT NULL', // 商品列表：json数据
       uid: 'INTEGER',
-      state: 'INTEGER', // 订单状态0：正常，1：挂单，2：退单
       pay_type: 'TEXT NOT NULL', // 支付方式：json数据
-      remarks: 'TEXT',
       pay_state: 'INTEGER', // 支付状态：0未支付，1已支付
       card_no: 'TEXT', // 会员卡号
-      uncleared_money: 'FLOAT',
-      discount_money: 'FLOAT',
+      remarks: 'TEXT',
+      state: 'INTEGER', // 订单状态0：正常，1：挂单，2：退单
       sync: 'INTEGER', // 同步状态：0未同步，1已同步
       create_time: 'INTEGER'
+    },
+    // 交班记录
+    work_log: {
+      id: 'INTEGER PRIMARY KEY',
+      uid: 'INTEGER', // 用户ID
+      start_time: 'INTEGER', // 接班卡时间(上班)
+      end_time: 'INTEGER', // 交班卡时间(下班)
+      total_money: 'FLOAT', // 实收总额
+      cash_money: 'FLOAT', // 现金
+      wechat_money: 'FLOAT', // 微信
+      ali_money: 'FLOAT', // 支付宝
+      bankcard_money: 'FLOAT', // 银行卡
+      card_money: 'FLOAT', // 会员卡消费金额
+      recharge_money: 'FLOAT', // 充值金额
+      return_money: 'FLOAT', // 退款总额
+      change_money: 'FLOAT', // 找零
+      orders_cnt: 'INTEGER', // 交易单据总数
+      put_orders_cnt: 'INTEGER', // 挂单总数
+      bak_orders_cnt: 'INTEGER', // 退单总数
+      state: 'INTEGER', // 状态：0未交班，1已交班
+      sync: 'INTEGER' // 同步状态：0未同步，1已同步
     },
     // 退单记录
     order_return: {
@@ -104,34 +151,13 @@ const websql = {
       card_no: 'VARCHAR(100)',
       create_time: 'INTEGER'
     },
-    // 交班记录
-    work_log: {
-      id: 'INTEGER PRIMARY KEY',
-      uid: 'INTEGER', // 用户ID
-      start_time: 'INTEGER', // 接班卡时间(上班)
-      end_time: 'INTEGER', // 交班卡时间(下班)
-      total_money: 'FLOAT', // 实收总额
-      cash_money: 'FLOAT', // 现金
-      wechat_money: 'FLOAT', // 微信
-      ali_money: 'FLOAT', // 支付宝
-      bankcard_money: 'FLOAT', // 银行卡
-      card_money: 'FLOAT', // 会员卡消费金额
-      recharge_money: 'FLOAT', // 充值金额
-      return_money: 'FLOAT', // 退款总额
-      change_money: 'FLOAT', // 找零
-      orders_cnt: 'INTEGER', // 交易单据总数
-      put_orders_cnt: 'INTEGER', // 挂单总数
-      bak_orders_cnt: 'INTEGER', // 退单总数
-      state: 'INTEGER', // 状态：0未交班，1已交班
-      sync: 'INTEGER' // 同步状态：0未同步，1已同步
-    },
 
     // 本地数据部分
-    // 同步时间记录
-    sync_time: {
-      id: 'INTEGER PRIMARY KEY',
-      key: 'VARCHAR(30)',
-      sync_time: 'INTEGER'
+    // 基础设置
+    cash_conf: {
+      id: 'INTEGER_PRIMARK_KEY',
+      name: 'VARCHAR(50) NOT NULL',
+      val: 'TEXT NOT NULL'
     },
     // 日订单自增记录
     serial_number: {
@@ -146,12 +172,6 @@ const websql = {
       errmsg: 'VARCHAR(200)',
       create_time: 'INTEGER'
     },
-    // 基础设置
-    cash_conf: {
-      id: 'INTEGER_PRIMARK_KEY',
-      name: 'VARCHAR(50) NOT NULL',
-      val: 'TEXT NOT NULL'
-    },
     // 分类打印机设置
     goods_cate_print: {
       id: 'INTEGER PRIMARY KEY',
@@ -160,6 +180,12 @@ const websql = {
       width: 'INTEGER',
       print_equipment: 'VARCHAR(80)',
       ip: 'VARCHAR(30)'
+    },
+    // 同步时间记录
+    sync_time: {
+      id: 'INTEGER PRIMARY KEY',
+      key: 'VARCHAR(30)',
+      sync_time: 'INTEGER'
     }
   },
 

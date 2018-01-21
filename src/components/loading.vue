@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {_online} from '@/lib/sync'
+import {_init, _online} from '@/lib/sync'
 
 import {mapGetters} from 'vuex'
 
@@ -30,18 +30,52 @@ export default {
     ...mapGetters([
       'init',
       'requests',
-      'uploads'
+      'uploads',
+      'inters'
     ])
   },
   methods: {
+    /**
+     * [Init_Sync 初始化]
+     * @return {[]} []
+     */
+    async Init_Sync () {
+      // 重组初始化列表
+      let arr = []
+      for (let item of this.init) {
+        if (!item.db) arr.push(item)
+      }
+
+      // 初始化本地环境
+      let r = await _init(arr, this.steps)
+      if (!r) {
+        this.steps.name = '初始化失败，请检查系统环境'
+        return false
+      }
+
+      // 重组请求列表
+      arr = []
+      for (let item of this.requests) {
+        if (item.db && item.sync) arr.push(item)
+      }
+
+      // 同步线上数据
+      r = await _online(arr, this.$http, this.steps)
+      if (!r) {
+        this.steps.name = '同步失败，请检查网络环境'
+        return false
+      }
+
+      this.steps.name = '正在为您载入界面，请稍后'
+
+      // 载入界面
+      setTimeout(() => {
+        this.$router.push({path: '/settings'})
+      }, 1500)
+    }
   },
   created () {
-    // 重组请求列表
-    let arr = []
-    for (let item of this.requests) {
-      if (item.sync) arr.push(item)
-    }
-    _online(arr, this.$http, this.steps)
+    this.Init_Sync()
   },
   mounted () {
   }
