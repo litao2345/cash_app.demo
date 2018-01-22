@@ -17,7 +17,8 @@
           <el-col :span="10">
             <p>
               <span>退菜数量：</span>
-              <el-input-number v-model="num1" @change="handleChange" :min="1" label="描述文字"></el-input-number>
+              <el-input-number v-model="num1" :min="1" label="描述文字"
+              @change="handleChange" ></el-input-number>
             </p>
             <p>退菜总价: ￥{{total_price}}</p>
           </el-col>
@@ -28,8 +29,8 @@
         </el-row>
         <el-row>退菜原因：</el-row>
         <el-row class="tag">
-          <el-tag size="medium"
-          v-for="item in orders2.out" :key="item">{{item}}</el-tag>
+          <el-tag size="medium" :key="item"
+          v-for="item in orders2.out">{{item}}</el-tag>
         </el-row>
         <el-row><textarea class="text" rows="10" placeholder="请输入其他原因"></textarea></el-row>
       </div>

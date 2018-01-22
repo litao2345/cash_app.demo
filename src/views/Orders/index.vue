@@ -27,8 +27,9 @@
             <el-col :span="5">金额</el-col>
           </el-row>
           <el-row :key="order.key" class="greens"
+            @click.native="pop(order)"
             v-for="order in orders"
-            @click.native="pop(order)">
+            >
             <el-col :span="9">{{order.name}}</el-col>
             <el-col :span="5">{{order.price}}</el-col>
             <el-col :span="5">{{order.num}}</el-col>
@@ -111,20 +112,19 @@
       </el-row>
 
       <!-- 子组件 -->
-      <itemselected :orders2="orders2"
+      <iTEMOrders :orders2="orders2"
       @orders_select="getData"
       v-show="type">
-        
-      </itemselected>
+      </iTEMOrders>
     </div>
   </div>
 </template>
 
 <script>
-import itemselected from '../../components/orders_select'
+import iTEMOrders from '../../components/orders_select'
 export default {
   components: {
-    itemselected
+    iTEMOrders
   },
   props: [
   ],
@@ -225,54 +225,89 @@ export default {
     }
   },
   methods: {
-    select (row, event, column) {
-      console.log('row', row, event, column)
+    /**
+     * @param  {[object]} row [点击表格当前行数据]
+     * @return {[object]} [存入orders]
+     */
+    select (row) {
       this.id = row.id
       this.orders = row.orders
     },
+    /**
+     * @param  {[object]} orders [点击菜单当前行的数据]
+     * @return {[object]} [存入orders2]
+     */
     pop (orders) {
       this.type = true
-      console.log(orders)
       this.orders2 = orders
     },
     getData (data) {
-      console.log('data', data)
       this.type = false
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="sass">
 /**
  * 重置
  */
-.nav{width:360px;padding:0;}
+.nav
+  width: 360px
+  padding: 0
 
 /**
  * 表格
  */
-.orders .main .top{float:right;padding:10px;}
-.orders .main .top .el-input{width:300px;}
-
-.orders .main .content{padding:10px;clear:both;}
-
-.orders .greens{cursor:pointer;}
-.orders .greens:hover{background:#f6f6f6;}
+.orders
+  .main
+    .top
+      float: right
+      padding: 10px
+    .el-input
+      width: 300px
+    .content
+      padding: 10px
+      clear: both
+  .greens
+    cursor: pointer
+    &:hover
+      background: #f6f6f6
 </style>
 
-<style>
-/*.el-input input::-webkit-input-placeholder{color:red}*/
+<style lang="sass">
+/*.el-input input: :-webkit-input-placeholder;color:red}*/
 /**
  * 弹窗
  */
-.orders .main .pop_head .el-button:last-child{float:right;}
-
-.orders .main .pop_content{padding:10px 60px;}
-.orders .main .pop_content .menu .el-col-10 p{height:50px;line-height:50px;}
-.orders .main .pop_content .menu_pic{width:100px;height:100px;}
-.orders .main .pop_content .menu_pic img{max-width:100%;max-height:100%;}
-.orders .main .pop_content .tag{margin-left:-15px}
-.orders .main .pop_content .el-tag--medium{height:40px;margin:10px 15px;line-height:40px;text-align:center;font-size:15px;}
-.orders .main .pop_content .text{width:100%;padding:5px 10px;box-sizing:border-box;}
+.orders
+  .main
+    .pop_head
+      .el-button:last-child
+        float: right
+    .pop_content
+      padding: 10px 60px
+      .menu 
+        .el-col-10 
+          p
+            height: 50px
+            line-height: 50px
+        .menu_pic
+          width: 100px
+          height: 100px
+          img
+            max-width: 100%
+            max-height: 100%
+      .tag
+        margin-left: -15px
+        .el-tag--medium
+          height: 40px
+          margin: 10px 15px
+          line-height: 40px
+          text-align: center
+          font-size: 15px
+      .text
+        width: 100%
+        padding: 5px 10px
+        box-sizing: border-box
 </style>
