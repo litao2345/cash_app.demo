@@ -10,6 +10,7 @@ const websql = {
     // 店铺广告图
     adv_img: {
       id: 'INTEGER PRIMARY KEY',
+      adv_id: 'INTEGER', // 广告图ID
       img: 'TEXT',
       number: 'INTEGER'
     },
@@ -156,8 +157,8 @@ const websql = {
     // 基础设置
     cash_conf: {
       id: 'INTEGER_PRIMARK_KEY',
-      name: 'VARCHAR(50) NOT NULL',
-      val: 'TEXT NOT NULL'
+      name: 'VARCHAR(50) NOT NULL', // 设置名
+      val: 'TEXT NOT NULL' // 设置值
     },
     // 日订单自增记录
     serial_number: {
@@ -267,25 +268,9 @@ const websql = {
 
   /**
    * [insert 添加]
-   * @param {[String]} name [表名]
-   * @param {[Object]} data [数据]
-   * @return {[Boolean]} [结果返回值]
+   * @return {[]} []
    */
-  insert: async (name, data) => {
-    const db = _database()
-    const tb = db.instance(name)
-
-    try {
-      await new Promise((resolve) => {
-        tb.save(data, (row) => {
-          resolve(row)
-        })
-      })
-
-      return true
-    } catch (err) {
-      return false
-    }
+  insert: async () => {
   },
 
   /**

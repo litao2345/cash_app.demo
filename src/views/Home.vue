@@ -1,5 +1,6 @@
 <template>
-  <el-container class="app">
+  <el-container class="app"
+    v-loading="lod">
     <el-aside class="aside" width="88px">
       <div class="lnk">
         <router-link :key="index" :to="item.path"
@@ -16,6 +17,9 @@
 </template>
 
 <script>
+import {_interline, _storeline} from '@/lib/sync'
+import {mapGetters, mapActions} from 'vuex'
+
 export default {
   components: {
   },
@@ -23,11 +27,57 @@ export default {
   ],
   data () {
     return {
+      /**
+       * 其它
+       */
+      lod: true // 加载动画
     }
   },
+  computed: {
+    ...mapGetters([
+      'inserts',
+      'stores'
+    ])
+  },
   methods: {
+    ...mapActions([
+      'advSet',
+      'actSet',
+      'deskscateSet',
+      'desksSet',
+      'goodscateSet',
+      'goodsunitSet',
+      'goodsSet',
+      'ordersSet'
+    ]),
+
+    /**
+     * [Init_Store 初始化Store全局数据配置]
+     * @return {[]} []
+     */
+    async Init_Store () {
+      // 重组接口列表
+      let arr = []
+
+      // 配置接口数据
+      const inter = await _interline()
+      if (!inter) {}
+
+      // 重组全局列表
+      arr = []
+      for (let item of this.stores) {
+        if (typeof item.fun === 'string') item.fun = this[item.fun]
+        arr.push(item)
+      }
+
+      // 配置全局数据
+      await _storeline(arr)
+
+      this.lod = false // 完成全部配置
+    }
   },
   created () {
+    this.Init_Store()
   },
   mounted () {
   }

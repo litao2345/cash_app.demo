@@ -20,15 +20,65 @@ const powersSet = ({commit}, datas) => {
 }
 
 /**
- * [activity 店铺活动信息]
+ * [adv 店铺广告图]
  */
-const activitySet = ({commit}, datas) => {
-  commit('activitySETS', datas)
+const advSet = ({commit}, datas) => {
+  commit('advSETS', datas)
+}
+
+/**
+ * [act 店铺活动信息]
+ */
+const actSet = ({commit}, datas) => {
+  commit('actSETS', datas)
+}
+
+/**
+ * [deskscate 餐桌分类列表]
+ */
+const deskscateSet = ({commit}, datas) => {
+  commit('deskscateSETS', datas)
+}
+
+/**
+ * [desks 餐桌列表]
+ */
+const desksSet = ({commit}, datas) => {
+  commit('desksSETS', datas)
+}
+
+/**
+ * [goodscate 商品分类列表]
+ */
+const goodscateSet = ({commit}, datas) => {
+  commit('goodscateSETS', datas)
+}
+
+/**
+ * [goodsunit 商品单位列表]
+ */
+const goodsunitSet = ({commit}, datas) => {
+  commit('goodsunitSETS', datas)
+}
+
+/**
+ * [goods 商品列表]
+ */
+const goodsSet = ({commit}, datas) => {
+  commit('goodsSETS', datas)
+}
+
+/**
+ * [orders 订单列表]
+ */
+const ordersSet = ({commit}, datas) => {
+  commit('ordersSETS', datas)
 }
 
 export {
-  userinfoSet,
-  shopsSet,
-  powersSet,
-  activitySet
+  userinfoSet, shopsSet, powersSet,
+  advSet, actSet,
+  deskscateSet, desksSet,
+  goodscateSet, goodsunitSet, goodsSet,
+  ordersSet
 }

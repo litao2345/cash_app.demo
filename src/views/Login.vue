@@ -16,7 +16,7 @@
               <tr>
                 <th><img src="../assets/login/account.png" /></th>
                 <td>
-                  <el-form-item label="" prop="account">
+                  <el-form-item prop="account">
                     <el-input placeholder="请输入登录帐号" clearable autofocus
                       v-model="forms.account"></el-input>
                   </el-form-item>
@@ -25,7 +25,7 @@
               <tr>
                 <th><img src="../assets/login/password.png" /></th>
                 <td>
-                  <el-form-item label="" prop="password">
+                  <el-form-item prop="password">
                     <el-input placeholder="请输入密码" clearable
                       v-model="forms.password"></el-input>
                   </el-form-item>
@@ -100,6 +100,7 @@ export default {
       'shopsSet',
       'powersSet'
     ]),
+
     /**
      * [Submit_Form 提交登录信息]
      * @param {[Object]} datas [表单数据]

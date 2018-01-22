@@ -15,7 +15,7 @@ const state = {
     /**
      * 初始化
      */
-    init: [
+    inits: [
       {name: '基础配置', init: 'init_base'},
       {name: '系统设置', db: 'cash_conf', init: 'init_conf'},
       {name: '交班状态', db: 'work_log', init: 'init_work'}
@@ -41,15 +41,29 @@ const state = {
      * 上传
      */
     uploads: [
-      {name: '订单列表', url: 'create_order'},
-      {name: '交班信息', url: 'set_cashier_log'}
+      {name: '订单列表', url: 'create_order', upload: 'upload_orders'},
+      {name: '交班信息', url: 'set_cashier_log', upload: 'upload_works'}
     ],
 
     /**
      * 接口
      */
     inters: [
-      {name: '客户端基本信息', sync: 'sync_client'}
+      {name: '客户端基本信息', inter: 'inter_client'}
+    ],
+
+    /**
+     * 全局
+     */
+    stores: [
+      {name: '店铺广告图', fun: 'advSet', db: 'adv_img'},
+      {name: '店铺活动信息', fun: 'actSet', db: 'activity'},
+      {name: '餐桌分类列表', fun: 'deskscateSet', db: 'desks_cate'},
+      {name: '餐桌列表', fun: 'desksSet', db: 'desks', where: 'desks'},
+      {name: '商品分类列表', fun: 'goodscateSet', db: 'goods_cate'},
+      {name: '商品单位列表', fun: 'goodsunitSet', db: 'goods_unit'},
+      {name: '商品列表', fun: 'goodsSet', db: 'goods'},
+      {name: '订单列表', fun: 'ordersSet', db: 'orders'}
     ]
   },
 
@@ -69,9 +83,44 @@ const state = {
   Powers: [],
 
   /**
-   * [Activity 活动信息]
+   * [Adv 店铺广告图]
    */
-  Activity: [],
+  Adv: [],
+
+  /**
+   * [Act 店铺活动信息]
+   */
+  Act: {},
+
+  /**
+   * [Deskscate 餐桌分类列表]
+   */
+  Deskscate: [],
+
+  /**
+   * [Desks 餐桌列表]
+   */
+  Desks: [],
+
+  /**
+   * [Goodscate 商品分类列表]
+   */
+  Goodscate: [],
+
+  /**
+   * [Goodsunit 商品单位列表]
+   */
+  Goodsunit: [],
+
+  /**
+   * [Goods 商品列表]
+   */
+  Goods: [],
+
+  /**
+   * [Orders 订单列表]
+   */
+  Orders: [],
 
   /**
    * [Settings 配置]

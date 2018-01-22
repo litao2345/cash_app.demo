@@ -6,8 +6,8 @@ const sync = state => {
 }
 
 // 初始化
-const init = state => {
-  return state.Sync.init
+const inits = state => {
+  return state.Sync.inits
 }
 
 // 请求
@@ -23,6 +23,11 @@ const uploads = state => {
 // 接口
 const inters = state => {
   return state.Sync.inters
+}
+
+// 全局
+const stores = state => {
+  return state.Sync.stores
 }
 
 /**
@@ -47,10 +52,59 @@ const powers = state => {
 }
 
 /**
- * [activity 店铺活动信息]
+ * [adv 店铺广告图]
  */
-const activity = state => {
-  return state.Activity
+const adv = state => {
+  return state.Adv
+}
+
+/**
+ * [act 店铺活动信息]
+ */
+const act = state => {
+  return state.Act
+}
+
+/**
+ * [deskscate 餐桌分类列表]
+ */
+const deskscate = state => {
+  return state.Deskscate
+}
+
+/**
+ * [desks 餐桌列表]
+ */
+const desks = state => {
+  return state.Desks
+}
+
+/**
+ * [goodscate 商品分类列表]
+ */
+const goodscate = state => {
+  return state.Goodscate
+}
+
+/**
+ * [goodsunit 商品单位列表]
+ */
+const goodsunit = state => {
+  return state.Goodsunit
+}
+
+/**
+ * [goods 商品列表]
+ */
+const goods = state => {
+  return state.Goods
+}
+
+/**
+ * [orders 订单列表]
+ */
+const orders = state => {
+  return state.Orders
 }
 
 /**
@@ -116,10 +170,11 @@ const us = state => {
 }
 
 export {
-  sync, init, requests, uploads, inters,
-  userinfo,
-  shops,
-  powers,
-  activity,
+  sync, inits, requests, uploads, inters, stores,
+  userinfo, shops, powers,
+  adv, act,
+  deskscate, desks,
+  goodscate, goodsunit, goods,
+  orders,
   settings, base, basic, back, tips, record, print, category, other, shop, system, us
 }

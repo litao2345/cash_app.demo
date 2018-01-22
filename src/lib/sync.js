@@ -9,16 +9,17 @@ if (del) _drop()
  */
 const sync = {
   /**
-   * [init 初始化本地环境]
+   * [baseline 初始化本地环境]
    * @param {[Array]}  inits [初始化队列]
    * @param {[Object]} steps [同步进度]
    * @return {[Boolean]} [结果返回值]
    */
-  init: async (inits, steps) => {
+  baseline: async (inits, steps) => {
     for (let item of inits) {
       if (steps) steps.name = '正在初始化：' + item.name
+
       let r = await sync[item.init]()
-      if (!r) return false
+      if (!r) return r
     }
 
     return true
@@ -34,16 +35,13 @@ const sync = {
   online: async (requests, http, steps) => {
     const max = requests.length
     for (let item of requests) {
-      try {
-        if (steps) steps.name = '正在同步数据：' + item.name
+      if (steps) steps.name = '正在同步数据：' + item.name
 
-        await sync[item.sync](item, http)
+      let r = await sync[item.sync](item, http)
+      if (!r) return r
 
-        const index = requests.indexOf(item) + 1
-        if (steps) steps.percent = parseInt((index / max) * 100)
-      } catch (err) {
-        return false
-      }
+      let index = requests.indexOf(item) + 1
+      if (steps) steps.percent = parseInt((index / max) * 100)
     }
 
     return true
@@ -54,6 +52,26 @@ const sync = {
    * @return {[Boolean]} [结果返回值]
    */
   offline: async () => {
+  },
+
+  /**
+   * [interline 配置接口数据]
+   * @return {[Boolean]} [结果返回值]
+   */
+  interline: async () => {
+  },
+
+  /**
+   * [storeline 配置全局数据]
+   * @param {[Array]} arr [待处理全局队列]
+   * @return {[]} []
+   */
+  storeline: async (arr) => {
+    for (let item of arr) {
+      let r = await _get(item.db)
+      if (item.db === 'activity') item.fun(r[0])
+      else item.fun(r)
+    }
   },
 
   /**
@@ -87,7 +105,8 @@ const sync = {
       'key': value,
       'sync_time': timestamp
     }
-    return _save('sync_time', data, 'key')
+    const r = _save('sync_time', data, 'key')
+    return r
   },
 
   /**
@@ -113,7 +132,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt.adv)
       if (!rt.adv.length) return true // 返回为空
     } catch (err) {
       return false
@@ -123,7 +141,7 @@ const sync = {
     for (let item of rt.adv) {
       if (parseInt(item.is_del) === 1 || parseInt(item.state) === 0) {
         // 删除店铺广告图
-        const r = await _del(request.db, ('id="' + item.id + '"'))
+        let r = await _del(request.db, ('adv_id="' + item.id + '"'))
         if (!r) return r
       } else {
         // 更新店铺广告图
@@ -132,20 +150,21 @@ const sync = {
           img: item.img,
           number: item.number
         }
-        const r = await _save(request.db, data, 'id')
+        let r = await _save(request.db, data, 'adv_id')
         if (!r) return r
       }
     }
 
     // 更新基础配置
     data = {
-      'name': 'diff_time',
+      'name': 'diftime',
       'val': new Date().getTime() - (rt.time * 1000)
     }
-    const r = await _save('cash_conf', data, 'name')
-    if (!r) return r
+    const r2 = await _save('cash_conf', data, 'name')
+    if (!r2) return r2
 
-    return sync.save_time(request.sync, rt.time)
+    const r = await sync.save_time(request.sync, rt.time)
+    return r
   },
 
   /**
@@ -159,7 +178,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, {}, http)
-      console.log('return', rt.activity, rt.goods_activity)
     } catch (err) {
       return false
     }
@@ -169,7 +187,8 @@ const sync = {
       activity: JSON.stringify(rt.activity),
       goods_activity: JSON.stringify(rt.goods_activity)
     }
-    return _save(request.db, data, 'id')
+    const r = await _save(request.db, data, 'id')
+    return r
   },
 
   /**
@@ -186,7 +205,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt.list)
       if (!rt.list.length) return true // 返回为空
     } catch (err) {
       return false
@@ -206,12 +224,13 @@ const sync = {
           create_time: item.create_time,
           update_time: item.update_time
         }
-        const r = await _save(request.db, data, 'cate_id')
+        let r = await _save(request.db, data, 'cate_id')
         if (!r) return r
       }
     }
 
-    return sync.save_time(request.sync, rt.time)
+    const r = await sync.save_time(request.sync, rt.time)
+    return r
   },
 
   /**
@@ -228,7 +247,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt.tables)
       if (!rt.tables.length) return true // 返回为空
     } catch (err) {
       return false
@@ -252,12 +270,13 @@ const sync = {
           create_time: item.create_time,
           update_time: item.update_time
         }
-        const r = await _save(request.db, data, 'desks_id')
+        let r = await _save(request.db, data, 'desks_id')
         if (!r) return r
       }
     }
 
-    return sync.save_time(request.sync, rt.time)
+    const r = await sync.save_time(request.sync, rt.time)
+    return r
   },
 
   /**
@@ -274,7 +293,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt.cates)
       if (!rt.cates.length) return true // 返回为空
     } catch (err) {
       return false
@@ -295,12 +313,13 @@ const sync = {
           create_time: item.create_time,
           update_time: item.update_time
         }
-        const r = await _save(request.db, data, 'cate_id')
+        let r = await _save(request.db, data, 'cate_id')
         if (!r) return r
       }
     }
 
-    return sync.save_time(request.sync, rt.time)
+    const r = await sync.save_time(request.sync, rt.time)
+    return r
   },
 
   /**
@@ -317,7 +336,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt)
       if (!rt.length) return true // 返回为空
     } catch (err) {
       return false
@@ -330,11 +348,12 @@ const sync = {
         id: item.id,
         name: item.name
       }
-      const r = await _save(request.db, data, 'id')
+      let r = await _save(request.db, data, 'id')
       if (!r) return r
     }
 
-    return sync.save_time(request.sync, parseInt(new Date().getTime() / 1000))
+    const r = await sync.save_time(request.sync, parseInt(new Date().getTime() / 1000))
+    return r
   },
 
   /**
@@ -351,7 +370,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt.goods)
       if (!rt.goods.length) return true // 返回为空
     } catch (err) {
       return false
@@ -381,11 +399,12 @@ const sync = {
         create_time: item.create_time,
         update_time: item.update_time
       }
-      const r = await _save(request.db, data, 'goods_id')
+      let r = await _save(request.db, data, 'goods_id')
       if (!r) return r
     }
 
-    return sync.save_time(request.sync, rt.time)
+    const r = await sync.save_time(request.sync, rt.time)
+    return r
   },
 
   /**
@@ -402,7 +421,6 @@ const sync = {
     let rt
     try {
       rt = await _sync(request.url, $d, http)
-      console.log('return', rt.orders)
       if (!rt.orders.length) return true // 返回为空
     } catch (err) {
       return false
@@ -429,11 +447,12 @@ const sync = {
         sync: 1,
         create_time: item.create_time
       }
-      const r = await _save(request.db, data, 'order_no')
+      let r = await _save(request.db, data, 'order_no')
       if (!r) return r
     }
 
-    return sync.save_time(request.sync, rt.time)
+    const r = await sync.save_time(request.sync, rt.time)
+    return r
   },
 
   /**
@@ -444,10 +463,8 @@ const sync = {
    */
   sync_gift: async (request, http) => {
     // 同步数据
-    let rt
     try {
-      rt = await _sync(request.url, {}, http)
-      console.log('return', rt.list)
+      await _sync(request.url, {}, http)
     } catch (err) {
       return false
     }
@@ -557,10 +574,14 @@ const sync = {
   // }
 }
 
-const _init = sync.init
+const _baseline = sync.baseline
 const _online = sync.online
+const _interline = sync.interline
+const _storeline = sync.storeline
 
 export {
-  _init,
-  _online
+  _baseline,
+  _online,
+  _interline,
+  _storeline
 }

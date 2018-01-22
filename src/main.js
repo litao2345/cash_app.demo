@@ -37,8 +37,7 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-/*
- eslint-disable no-new
+/* eslint-disable no-new
  */
 new Vue({
   el: '#app',
