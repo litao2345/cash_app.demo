@@ -28,17 +28,17 @@
     </el-row>
 
     <!-- 子组件 -->
-    <itemselected :code="code" :selected="selected" ref="itemselected"
-      @basic_select="getData"
-      v-show="type"></itemselected>
+    <iTEMSelected :code="code" :selected="selected" ref="iTEMSelected"
+      @Basic_Select="getData"
+      v-show="type"></iTEMSelected>
   </div>
 </template>
 
 <script>
-import itemselected from '../../components/selected_box'
+import iTEMSelected from '../../components/selected_box'
 export default {
   components: {
-    itemselected
+    iTEMSelected
   },
   props: [
   ],
@@ -51,6 +51,10 @@ export default {
     }
   },
   methods: {
+    /**
+     * @param  {[string]} k [获取索引]
+     * @return {[object]} [传送code给子组件json数组]
+     */
     open (k) {
       this.code = {
         key: k,
@@ -72,6 +76,11 @@ export default {
       }
       this.type = true
     },
+    /**
+     * @param  {[string]} k [判断是否选择]
+     * @param  {[number]} select [选择的索引值]
+     * @return {[string]} [选择后的数据]
+     */
     getData (k, select) {
       this.type = false
       if (k !== null) {

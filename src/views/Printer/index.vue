@@ -168,27 +168,64 @@ export default {
 }
 </script>
 
-<style scoped>
-.printer .main{padding: 20px 60px 10px;}
-.printer .main .title{padding:20px 0;overflow:hidden;border-bottom:1px solid #E4E4E4;}
-.printer .main .title .el-row{float:right;}
+<style scoped lang="sass">
+.printer
+  .main
+    padding: 20px 60px 10px
+    .title
+      padding: 20px 0
+      overflow: hidden
+      border-bottom: 1px solid #E4E4E4
+      .el-row
+        float: right
 
-.printer .main .pring_type{overflow:hidden;}
-.printer .main .printer_type .pub{width:100px;float:left;margin-right:20px;padding-top:80px;background-image:url(../../assets/printer1.png);background-repeat:no-repeat;background-position: 50% 40%;background-size:50px;text-align: center;}
-.printer .main .printer_type .printer_type1{background-image:url(../../assets/printer1.png);}
-.printer .main .printer_type .printer_type2{background-image:url(../../assets/printer2.png);}
+    .printer_type
+      overflow: hidden
+      .pub
+        width: 100px
+        float: left
+        margin-right: 20px
+        padding-top: 80px
+        background-repeat: no-repeat
+        background-position: 50% 40%
+        background-size: 50px
+        text-align: center
+      .printer_type1
+        background-image: url(../../assets/printer1.png)
+      .printer_type2
+        background-image: url(../../assets/printer2.png)
 
-.printer .main .head{padding-top:40px;}
-.printer .main .el-input{width:300px;}
-.printer .main .head .el-col:first-child{font-weight: bold;font-size:20px;line-height:40px;}
-.printer .main .head .el-col:last-child{padding-bottom:10px;text-align:right;}
+    .head
+      padding-top: 40px
+      .el-col:first-child
+        font-weight: bold
+        font-size: 20px
+        line-height: 40px
+      .el-col:last-child
+        padding-bottom: 10px
+        text-align: right
+    .el-input
+      width: 300px
 </style>
 
-<style>
+<style lang="sass">
 /**
  * 弹窗
  */
-.printer .shade{width:100%;height:100%;position:fixed;top:0;background:gray;opacity:0.5;z-index:-1}
-.printer .pop_up{width:400px;left:-10px;}
-.printer .pop_up .detailed{width:400px;padding:0;margin-left:10px;}
+.printer
+  .shade
+    width: 100%
+    height: 100%
+    position: fixed
+    top: 0
+    background: gray
+    opacity: 0.5
+    z-index: -1
+  .pop_up
+    width: 400px
+    left: -10px
+    .detailed
+      width: 400px
+      padding: 0
+      margin-left: 10px
 </style>

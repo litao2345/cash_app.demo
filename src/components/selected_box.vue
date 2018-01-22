@@ -8,7 +8,7 @@
       <div class="pop_radio">
         <el-row>
           <el-radio-group ref="ref"
-            v-model="basic_select">
+            v-model="Basic_Select">
             <el-radio :key="index" :label="item.id"
               v-for="(item, index) in code.list">{{item.name}}</el-radio>
           </el-radio-group>
@@ -28,14 +28,13 @@ export default {
   ],
   data () {
     return {
-      screenWidth: document.body.clientWidth - 478,
-      basic_select: this.selected
+      Basic_Select: this.selected
     }
   },
   methods: {
     back () {
-      if (this.selected === this.basic_select) this.$emit('basic_select', null)
-      else this.$emit('basic_select', this.code.key, this.basic_select)
+      if (this.selected === this.Basic_Select) this.$emit('Basic_Select', null)
+      else this.$emit('Basic_Select', this.code.key, this.Basic_Select)
     }
   },
   created () {

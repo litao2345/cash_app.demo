@@ -119,7 +119,7 @@ textarea
         text-align: center
 
   .el-row
-    padding-top: 10px
+    margin-top: 10px
 
   .pop_up
     position: absolute
@@ -145,6 +145,11 @@ textarea
   &::-webkit-input-placeholder
     color: #8c8c8c
 
+.el-checkbox__input.is-focus .el-checkbox__inner
+  border-color: #dcdfe6
+.el-checkbox__input.is-checked .el-checkbox__inner
+  border-color: #fe0034
+
 /**
  * 其它
  */
@@ -161,6 +166,56 @@ textarea
   line-height: 40px
   color: #777
   text-align: center
+
+/**
+ * 订单, 清单
+ */
+.detailed
+  .head
+    height: 40px
+    font-weight: bold
+    line-height: 20px
+    text-align: center
+    background: #e5e5e5
+  .top
+    padding: 0 20px
+    .el-row:last-child
+      padding-bottom: 10px
+      border-bottom: 1px solid #ccc
+      span
+        padding-left: 25px
+        background:
+          position: 0 40%
+          size: 30px
+          repeat: no-repeat
+        &.order_end
+          background-image: url(assets/point_g.png)
+        &.order_un
+          background-image: url(assets/point_b.png)
+        &.order_out
+          background-image: url(assets/point_r.png)
+  .content
+    padding: 0 20px
+    text-align: center
+    .el-col-9
+      text-align: left
+    .menu
+      .el-row:first-child
+        color: #62a8ea
+      .el-row:last-child
+        padding-bottom: 10px
+        border-bottom: 1px solid #ccc
+  .footer
+    position: fixed
+    bottom: 10px
+    width: 360px
+    height: 160px
+    text-align: center
+    background: #e5e5e5
+    .button
+      padding-top: 60px
+      margin: 50px 20px 0
+      border-top: 1px solid #ccc
 
 /**
  * ProgresSive-Image控件
@@ -202,21 +257,4 @@ textarea
   100% 
     opacity: 1
     transform: scale(1)
-
-/**
- *  订单/清单
- */
-// .inline .detailed .head{height:40px;background:#E5E5E5;text-align:center;line-height:20px;font-weight:bold;}
-// .inline .detailed .top{padding:0 20px;}
-// .inline .detailed .top .el-row:last-child{padding-bottom:10px;border-bottom:1px solid #ccc;}
-// .inline .detailed .top .order_end{padding-left:25px;background-image:url(assets/point_g.png);background-size:30px;background-repeat:no-repeat;background-position:0 40%;}
-// .inline .detailed .top .order_un{padding-left:25px;background-image:url(assets/point_b.png);background-size:30px;background-repeat:no-repeat;background-position:0 40%;}
-// .inline .detailed .top .order_out{padding-left:25px;background-image:url(assets/point_r.png);background-size:30px;background-repeat:no-repeat;background-position:0 40%;}
-// .inline .detailed .content{text-align:center;padding:0 20px;}
-// .inline .detailed .content .el-col-9{text-align:left;}
-// .inline .detailed .content .menu .el-row:first-child{color:#62A8EA}
-// .inline .detailed .content .menu .el-row:last-child{padding-bottom:10px;border-bottom:1px solid #ccc;}
-
-// .inline .detailed .footer{position:fixed;bottom:10px;width:360px;height:160px;background:#E5E5E5;text-align:center;}
-// .inline .detailed .footer .button{padding-top:60px;margin:50px 20px 0;border-top:1px solid #ccc;}
 </style>
