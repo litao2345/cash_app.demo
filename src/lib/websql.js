@@ -1,371 +1,384 @@
-!function(name, definition, global){
-    if (typeof define === 'function') {// AMD
-        define(definition);
-    } else if (typeof module !== 'undefined' && module.exports) {// CommonJS
-        module.exports = definition();
-    } else {// normal
-        global[name] = definition();
+/**
+ * [websql 本地数据库类]
+ */
+const websql = {
+  /**
+   * [tables 数据表]
+   */
+  tables: {
+    // 同步数据部分
+    // 店铺广告图
+    adv_img: {
+      id: 'INTEGER PRIMARY KEY',
+      img: 'TEXT',
+      number: 'INTEGER'
+    },
+    // 店铺活动信息
+    activity: {
+      id: 'INTEGER PRIMARY KEY',
+      activity: 'TEXT NOT NULL', // 活动列表：json数据
+      goods_activity: 'TEXT NOT NULL' // 商品活动列表：json数据
+    },
+    // 餐桌分类列表
+    desks_cate: {
+      id: 'INTEGER PRIMARY KEY',
+      cate_id: 'INTEGER', // 分类ID
+      name: 'TEXT NOT NULL', // 分类名
+      create_time: 'INTEGER',
+      update_time: 'INTEGER'
+    },
+    // 餐桌列表
+    desks: {
+      id: 'INTEGER PRIMARY KEY',
+      desks_id: 'INTEGER', // 餐桌ID
+      name: 'TEXT NOT NULL', // 餐桌名
+      seat_cnt: 'INTEGER', // 座位数
+      cate_id: 'INTEGER', // 餐桌分类
+      state: 'INTEGER', // 状态 (0空闲, 1开台, 2下单, 3加菜, 4减菜)
+      table_order_id: 'INTEGER', // 餐桌当前订单号
+      create_time: 'INTEGER',
+      update_time: 'INTEGER'
+    },
+    // 商品分类列表
+    goods_cate: {
+      id: 'INTEGER PRIMARY KEY',
+      cate_id: 'INTEGER',
+      name: 'TEXT NOT NULL',
+      pid: 'INTEGER',
+      create_time: 'INTEGER',
+      update_time: 'INTEGER'
+    },
+    // 商品单位列表
+    goods_unit: {
+      id: 'INTEGER PRIMARY KEY',
+      name: 'VARCHAR(32)'
+    },
+    // 商品列表
+    goods: {
+      id: 'INTEGER PRIMARY KEY',
+      goods_id: 'INTEGER',
+      code: 'TEXT NOT NULL',
+      name: 'TEXT NOT NULL',
+      price: 'FLOAT',
+      img: 'TEXT',
+      description: 'TEXT NOT NULL',
+      py: 'VARCHAR(50)',
+      cate_id: 'INTEGER',
+      cate_name: 'VARCHAR(50)',
+      unit_id: 'INTEGER',
+      unit_name: 'TEXT NOT NULL',
+      goods_cate: 'INTEGER DEFAULT 0',
+      print_tag: 'INTEGER DEFAULT 0',
+      property: 'TEXT',
+      format: 'TEXT',
+      is_weight: 'INTEGER DEFAULT 0',
+      is_del: 'INTEGER',
+      sort_number: 'INTEGER DEFAULT 0',
+      create_time: 'INTEGER',
+      update_time: 'INTEGER'
+    },
+    // 订单列表
+    orders: {
+      id: 'INTEGER PRIMARY KEY',
+      local_order_no: 'VARCHAR(100)', // 本地订单号
+      order_no: 'VARCHAR(100)', // 云端订单号
+      order_cate: 'INTEGER', // 订单类型
+      money: 'FLOAT', // 总价
+      real_pay_money: 'FLOAT', // 支付金额
+      change_money: 'FLOAT', // 找零
+      discount_money: 'FLOAT',
+      uncleared_money: 'FLOAT',
+      goods: 'TEXT NOT NULL', // 商品列表：json数据
+      uid: 'INTEGER',
+      pay_type: 'TEXT NOT NULL', // 支付方式：json数据
+      pay_state: 'INTEGER', // 支付状态：0未支付，1已支付
+      card_no: 'TEXT', // 会员卡号
+      remarks: 'TEXT',
+      state: 'INTEGER', // 订单状态0：正常，1：挂单，2：退单
+      sync: 'INTEGER', // 同步状态：0未同步，1已同步
+      create_time: 'INTEGER'
+    },
+    // 交班记录
+    work_log: {
+      id: 'INTEGER PRIMARY KEY',
+      uid: 'INTEGER', // 用户ID
+      start_time: 'INTEGER', // 接班卡时间(上班)
+      end_time: 'INTEGER', // 交班卡时间(下班)
+      total_money: 'FLOAT', // 实收总额
+      cash_money: 'FLOAT', // 现金
+      wechat_money: 'FLOAT', // 微信
+      ali_money: 'FLOAT', // 支付宝
+      bankcard_money: 'FLOAT', // 银行卡
+      card_money: 'FLOAT', // 会员卡消费金额
+      recharge_money: 'FLOAT', // 充值金额
+      return_money: 'FLOAT', // 退款总额
+      change_money: 'FLOAT', // 找零
+      orders_cnt: 'INTEGER', // 交易单据总数
+      put_orders_cnt: 'INTEGER', // 挂单总数
+      bak_orders_cnt: 'INTEGER', // 退单总数
+      state: 'INTEGER', // 状态：0未交班，1已交班
+      sync: 'INTEGER' // 同步状态：0未同步，1已同步
+    },
+    // 退单记录
+    order_return: {
+      id: 'INTEGER PRIMARY KEY',
+      order_cate: 'INTEGER', // 订单类型
+      local_order_no: 'VARCHAR(100)', // 本地退单号
+      return_order_no: 'VARCHAR(100)', // 退单号
+      order_no: 'VARCHAR(100)', // 关联订单号
+      money: 'FLOAT', // 应退款金额
+      real_pay_money: 'FLOAT', // 实际退款金额
+      goods: 'TEXT NOT NULL', // 商品列表：json数据
+      uid: 'INTEGER',
+      cancle_state: 'INTEGER', // 退款状态0：退款中，1：已完成
+      pay_type: 'TEXT NOT NULL', // 支付方式：json数据
+      remarks: 'TEXT',
+      sync: 'INTEGER', // 同步状态：0未同步，1已同步
+      create_time: 'INTEGER'
+    },
+    // 会员充值记录
+    card_recharge: {
+      id: 'INTEGER PRIMARY KEY',
+      local_order_no: 'VARCHAR(100)', // 本地退单号
+      order_no: 'VARCHAR(100)', // 关联订单号
+      money: 'FLOAT', // 应收金额
+      change_money: 'FLOAT', // 找零
+      give_money: 'FLOAT', // 赠送金额
+      real_pay_money: 'FLOAT', // 实际支付金额
+      uid: 'INTEGER',
+      pay_type: 'TEXT NOT NULL', // 支付方式：json数据
+      remarks: 'TEXT',
+      card_no: 'VARCHAR(100)',
+      create_time: 'INTEGER'
+    },
+
+    // 本地数据部分
+    // 基础设置
+    cash_conf: {
+      id: 'INTEGER_PRIMARK_KEY',
+      name: 'VARCHAR(50) NOT NULL',
+      val: 'TEXT NOT NULL'
+    },
+    // 日订单自增记录
+    serial_number: {
+      id: 'INTEGER PRIMARY KEY',
+      number: 'INTEGER',
+      day: 'DATE'
+    },
+    // 打印失败记录
+    print_error_log: {
+      id: 'INTEGER PRIMARY KEY',
+      orderid: 'VARCHAR(50)',
+      errmsg: 'VARCHAR(200)',
+      create_time: 'INTEGER'
+    },
+    // 分类打印机设置
+    goods_cate_print: {
+      id: 'INTEGER PRIMARY KEY',
+      cate_id: 'INTEGER',
+      print_type: 'INTEGER',
+      width: 'INTEGER',
+      print_equipment: 'VARCHAR(80)',
+      ip: 'VARCHAR(30)'
+    },
+    // 同步时间记录
+    sync_time: {
+      id: 'INTEGER PRIMARY KEY',
+      key: 'VARCHAR(30)',
+      sync_time: 'INTEGER'
     }
-}('WebsqlWrapper', function(){
-    "use strict";
-    /**
-     * WebsqlWrapper websql操作库
-     * ver:1.0
-     * 2013/2/7
-     * mailto: willian12345@126.com
-     */
-    
-    var init
-    , Database
-    , Table
-    , WebsqlWrapper
-    , emptyHandle
-    , errorHandle
-    , Utils
-    , convertToSQL
-    , log
-    , DEBUG = false
-    , slice = Array.prototype.slice
-    ;
+  },
 
-    /**
-     * [init 初始化此模块中所有变量]
-     */
-    init = function(){
-        Utils = {};
-        Utils.types = ["Array", "Boolean", "Date", "Number", "Object", "RegExp", "String", 'Function'];
-        Utils.is = {};
-        for(var i = 0, c; c = Utils.types[i++];){
-            Utils.is[c] = (function(type){
-                return function(obj){
-                    if(!obj) return false;
-                    return Object.prototype.toString.call(obj) == "[object " + type + "]";
-                }
-            })(c);
+  /**
+   * [database 建库]
+   * @return {[Object]} [实例化数据库]
+   */
+  database: () => {
+    const $log = JSON.parse(sessionStorage.getItem('log'))
+    const id = $log.shop_id
+
+    const $d = {
+      name: 'cashDb1_' + id,
+      displayName: 'cashDb_' + id,
+      version: 1.0,
+      debug: true
+    }
+
+    // 数据库未建
+    const $sync = JSON.parse(localStorage.getItem('sync'))
+    if (!$sync || !$sync[id].length) $d.maxSize = 128 * 1024 * 1024
+
+    return new window.WebsqlWrapper($d)
+  },
+
+  /**
+   * [define 建表]
+   * @return {[Boolean]} [结果返回值]
+   */
+  define: async () => {
+    const $log = JSON.parse(sessionStorage.getItem('log'))
+    const id = $log.shop_id
+
+    let $sync = JSON.parse(localStorage.getItem('sync'))
+    if (!$sync) $sync = {}
+    if (!$sync[id]) $sync[id] = []
+
+    const keys = Object.keys(websql.tables)
+    let rt = keys.length === $sync[id].length
+    if (rt) return rt // 数据表已全建
+
+    const db = _database()
+    for (let index of keys) {
+      try {
+        // 数据表未建
+        if ($sync[id].indexOf(index) === -1) {
+          let item = websql.tables[index]
+          const r = await new Promise((resolve) => {
+            db.define(index, item, () => {
+              resolve(index)
+            })
+          })
+
+          $sync[id].push(r)
         }
+      } catch (err) {
+        continue
+      }
+    }
 
-        log = function( a ){
-            if( DEBUG ) {
-                console.log.apply(console, arguments);
-            }
-        };
+    localStorage.setItem('sync', JSON.stringify($sync))
 
-        emptyHandle = function(){};
-        errorHandle = function( tx, err, sql ){
-            log('[error]:' + err.message + "  [sql]:" + sql);
-        };
+    rt = keys.length === $sync[id].length
+    return rt
+  },
 
-        // 转换 a === b && b == c 语句成sql语法
-        convertToSQL = function( sql ){
-            return sql.replace( /(?:&&)/,'AND' ).replace( /(?:[==|===])+/g, '=' );
-        };
-    };
+  /**
+   * [drop 删表]
+   * @return {[]} []
+   */
+  drop: async () => {
+    const db = _database()
+    for (let index of Object.keys(websql.tables)) {
+      await db.drop(index)
+    }
 
-    /**
-     * [数据表构造函数]
-     * eg: db.instance('codebook').get('code=2', function(){})
-     */
-    Table = function(name, db, websqlWrapper){
-        this.name = name;
-        this.db = db;
-        this.super = websqlWrapper;
-    };
-    Table.prototype = {
-        makeArgs: function( args ){
-            args = slice.call(args, 0);
-            args.unshift(this.name);
-            return args;
-        }
-    };
+    localStorage.removeItem('sync')
+  },
 
-    // 延迟至用到时才创建 table 的实例方法
-    ['update', 'insert', 'save', 'get', 'del', 'drop', 'batch'].forEach(function(v,i){
-        Table.prototype[v] = function(){
-            this.super[v].apply(this.super, this.makeArgs(arguments));
-            return this;
-        }
-    });
-    ///
-    ['query', 'count'].forEach(function(v){
-        Table.prototype[v] = function(){
-            this.super[v].apply(this.super, arguments);
-            return this;
-        };
-    });
+  /**
+   * [insert 添加]
+   * @param {[String]} name [表名]
+   * @param {[Object]} data [数据]
+   * @return {[Boolean]} [结果返回值]
+   */
+  insert: async (name, data) => {
+    const db = _database()
+    const tb = db.instance(name)
 
-    // websqlWrapper 构造函数
-    WebsqlWrapper = function ( opts ) {
-        try {  
-            if (!window.openDatabase) {  
-                alert('Databases are not supported in this browser.');  
-            } else {  
-                var shortName = opts.name;  
-                var version = opts.version;  
-                var displayName = opts.displayName;  
-                var maxSize = opts.maxSize || 100000; //  bytes 
-                
-                if(opts.debug){
-                    DEBUG = opts.debug;
-                }
+    try {
+      await new Promise((resolve) => {
+        tb.save(data, (row) => {
+          resolve(row)
+        })
+      })
 
-                this.db = openDatabase(shortName, version, displayName, maxSize);
-                opts.success && opts.success.call(this, this.db);
-            }  
-        } catch(e) {
-            if (e == 2) {
-                // Version number mismatch.  
-                log("Invalid database version.");  
-            } else {  
-                log("Unknown error "+e+".");  
-            }  
-            opts.fail && opts.fail.call(this, e);
-            return ;
-        }
-        this.events = {};  
-    };
-    WebsqlWrapper.setDebug = function( bool ){
-        DEBUG = bool;
-    };
-    WebsqlWrapper.prototype = {
-        query: function(sql, rowParam, cb){
-            if(sql === undefined){
-                return;
-            }
-            var params = []
-            , isSave = false
-            , self = this
-            , cmdStr
-            ;
-            if(Utils.is.Function(rowParam)){
-                cb = rowParam;
-            }
-            if(Utils.is.Array(rowParam)){
-                params = rowParam;
-            }
-            if(!cb){
-                cb = emptyHandle;
-            }
-            cmdStr = sql.slice(0, 6).toLocaleUpperCase();
-            if(cmdStr === 'UPDATE' || cmdStr === 'INSERT'){
-                isSave = true;
-            }
-            log(sql, params);
-            this.db.transaction(  
-                function (transaction) {  
-                    transaction.executeSql(sql, params, function(tx, results){
-                        var arr = [], row, i;
-                        for (i=0; i<results.rows.length; i++) {   
-                            row = results.rows.item(i); 
-                           arr.push(row);
-                        }
-                        cb(arr);
-                    }
-                    , function(tx, e){
-                        cb(null);
-                        errorHandle.apply(this, [tx, e, sql]);
-                    }); 
-                }  
-            ); 
-            return this;
-        }
-        , define: function( tableName, o , cb ){
-            var sql='', s='';
-            if(!Utils.is.Object(o)){
-                log('定义表格需要传入字段对象');
-                return ;
-            }
-            s = JSON.stringify(o).replace(/[":\{\}]/g, ' ');
-            sql = 'CREATE TABLE IF NOT EXISTS '+tableName+'('+ s +')';
-            this.query(sql, cb);
-        }
-        , update: function(tableName, values, where, cb){
-            var k, filed, _values;
-            if(!Utils.is.Object(values)) return false;
+      return true
+    } catch (err) {
+      return false
+    }
+  },
 
-            filed = [];
-            _values = [];
-            for(k in values){
-                filed.push(k);
-                _values.push(values[k]);
-            }
-            filed = filed.join(',');
+  /**
+   * [del 删除]
+   * @param {[String]} name      [表名]
+   * @param {[String]} condition [条件]
+   * @return {[Boolean]} [结果返回值]
+   */
+  del: async (name, condition) => {
+    // 数据是否存在
+    let rt = await _get(name, condition)
+    if (!rt) {
+      return rt
+    } else {
+      if (!rt.length) return true
+    }
 
-            var sql = 'UPDATE '+ tableName +' SET '+ filed.replace(/,/g, '=?,') +'=? ';
-            if(where){
-                where = where + '=' + '\'' + values[where] + '\'';
-                sql += 'WHERE '+ where;
-            }
-            sql += ';';
-            this.query(sql, _values, cb);
-            return this;
-        }
-        , insert: function(tableName, values, cb){
-            var k, filed, _values;
-            if(!Utils.is.Object(values)) return false;
-            filed = [];
-            _values = [];
-            for(k in values){
-                filed.push(k);
-                _values.push(values[k])
-            }
-            filed = filed.join(',');
-            var sql = 'INSERT INTO '+ tableName +'('+ filed +') VALUES ('+ filed.replace(/[a-zA-Z-_\d]+/g, '?') +');';
-            this.query(sql, _values, cb);
-            return this;
-        }
-        , save: function(tableName, values, key, cb){
-            var args, k, _filed, _values, where, sql;
-            if(!tableName || !Utils.is.Object(values) || !key) return this;
-            sql = 'SELECT count(*) FROM '+ tableName;
-            if(Utils.is.String(key)){
-                where = key + '=' + '\'' + values[key] + '\'';
-                sql +=' WHERE '+ where;
-            }
-            sql += ' ;';
-            this.count(sql, function(r){
-                if(r === 0){
-                    this.insert.apply(this, [tableName, values, cb]);
-                }else{
-                    this.update.apply(this, [tableName, values, key, cb]);
-                }
-            }.bind(this));
-            return this;
-        }
-        , count: function(sql, cb){
-            this.query(sql, function(r){
-                if(r.length){
-                    r = r[0];
-                    cb(r['count(*)']);
-                }else{
-                    cb(0);
-                }
-            });
+    const db = _database()
+    const tb = db.instance(name)
 
-            return this;
-        }
-        /**
-         * [get 查询数据]
-         * @param  {[type]}   tableName [table名称]
-         * @param  {[type]}   where     [SQL条件语句]
-         * @param  {Function} cb        [回调]
-         * @return {[type]}             [this]
-         */
-        , get: function(tableName, where, cb){
-            var sql = 'SELECT * FROM '+ tableName ;
-            if(Utils.is.String(where)){
-                sql += ' WHERE '+ convertToSQL(where);
-            }else if(Utils.is.Function(where)){
-                cb = where;
-            }
-            sql += ';';
-            this.query(sql, cb);
-            return this;
-        }
-        /**
-         * [del 删除命令]
-         * @param  {String}   tableName [table名称]
-         * @param  {[String]}   o     [SQL条件语句]
-         * @return {[type]}             [this]
-         */
-        , addField: function(tableName, o){
+    try {
+      await new Promise((resolve) => {
+        tb.del(condition, (row) => {
+          resolve(row)
+        })
+      })
 
-            for(var i=0; i<o.length; i++){
-                var sql = 'ALTER TABLE ' + tableName + ' ' + o[i];
-                this.query(sql);
-            }
+      return true
+    } catch (err) {
+      return false
+    }
+  },
 
-        }
-        /**
-         * [del 删除命令]
-         * @param  {String}   tableName [table名称]
-         * @param  {[String]}   where     [SQL条件语句]
-         * @param  {Function} cb        [回调]
-         * @return {[type]}             [this]
-         */
-        , del: function(tableName, where, cb){
-           var sql = 'DELETE FROM '+ tableName ;
-            if(where){
-                sql += ' WHERE ' + convertToSQL(where);
-            }else{
-                cb = where;
-            }
-            sql += ';';
-            this.query(sql, cb);
-            return this; 
-        }
-       /**
-        * [batch 批处理命令, 可批量进行save, insert, update, del]
-        * @param  {[String]}   tableName [执行操作的table名] , 可以不传表名，直接传arr数组，表名在 arr 项的 args属性中携带
-        * @param  {Array}   arr   [批处理命令集，型如{type: "update", args: ['表名',{id:1, name:'修改'},'id', callback]}]        
-        */
-        , batch: function(tableName, arr) {
-                if (Utils.is.Array(tableName)) {
-                    arr = tableName;
-                    tableName = null;
-                }
-                if (!Utils.is.Array(arr)) {
-                    return;
-                }
-                arr.forEach(function(v) {
-                    if (v.type === 'query') {
-                        this['query'].apply(this, v.args); //query不用传表名作为第一个参数
-                    } else {
-                        var args = tableName ? [].concat(tableName, v.args) : v.args; //当第一个参数tableName不是表名时，v.args中应该包含表名参数
-                        this[v.type].apply(this, args);
-                    }
-                }.bind(this));
-                return this;
-            }
-        /*
-         * 同个事务中执行原生SQL指令
-         * 
-         */
-        , batchExec: function(arr, cb) {
-            var i;
+  /**
+   * [save 更新]
+   * @param {[String]} name  [表名]
+   * @param {[Object]} data  [数据]
+   * @param {[String]} field [字段]
+   * @return {[Boolean]} [结果返回值]
+   */
+  save: async (name, data, field) => {
+    const db = _database()
+    const tb = db.instance(name)
 
-            if (!Utils.is.Array(arr)) {
-                return;
-            }
+    try {
+      await new Promise((resolve) => {
+        tb.save(data, field, (row) => {
+          resolve(row)
+        })
+      })
 
-            i = arr.length;
-            this.db.transaction(function(tx) {
-                arr.forEach(function(v) {
-                    var sql = v;
-                    tx.executeSql(sql, [], function(tx, results) {
-                        //console.log('SQL Batch Executed, ' + sql);
-                    }, function(tx, e) {
-                        cb(null);
-                        errorHandle.apply(this, [tx, e, sql]);
-                    });
-                });
-            }.bind(this));
-            return this;
-        }
-        /**
-         * [drop 删除表]
-         * @param  {[String]} tableName [tabel名称]
-         * @return {[Object]}           [this]
-         */
-        , drop: function(tableName){
-            this.query("DROP TABLE IF EXISTS "+ tableName +";", function(){
-                log('dropped!');
-            });
-            log("Table "+ tableName +" has been dropped.");
-            return this;
-        }
-        /**
-         * [instance 表实例]
-         * @param  {[type]} tableName [table名]
-         * @return {[Object]}           [this]
-         */
-        , instance: function(tableName){
-            return new Table(tableName, this.db, this);
-        }
-    };
+      return true
+    } catch (err) {
+      return false
+    }
+  },
 
-    init();
+  /**
+   * [get 查询]
+   * @param {[String]} name      [表名]
+   * @param {[String]} condition [条件]
+   * @return {[Array]} [查询结果]
+   */
+  get: async (name, condition) => {
+    const db = _database()
+    const tb = db.instance(name)
 
-    return function(data){
-        return new WebsqlWrapper(data);
-    };
-}, this);
+    try {
+      const rt = await new Promise((resolve) => {
+        tb.get(condition, (row) => {
+          resolve(row)
+        })
+      })
+
+      return rt
+    } catch (err) {
+      return false
+    }
+  }
+}
+
+const _database = websql.database
+const _define = websql.define
+const _drop = websql.drop
+const _del = websql.del
+const _save = websql.save
+const _get = websql.get
+
+export {
+  _database,
+  _define,
+  _drop,
+  _del,
+  _save,
+  _get
+}

@@ -5,7 +5,7 @@ var _ = {
 	/**
 	 * [tofix 格式化价格]
 	 * @param {[String]} price [价格]
-	 * @return {[String]} rt [返回价格]
+	 * @return {[String]} [返回价格]
 	 */
 	tofix: function (price)
 	{
@@ -18,7 +18,7 @@ var _ = {
 	 * @param {[String]} str  [字符串]
 	 * @param {[Int]}    max  [显示长度]
 	 * @param {[Int]}    type [显示方式]
-	 * @return {[String]} str [返回字符串]
+	 * @return {[String]} [返回字符串]
 	 */
 	size: function (str, max, type)
 	{
@@ -40,8 +40,7 @@ var _ = {
 /**
  * [app 公共方法库 API]
  */
-var app = function ()
-{};
+var app = function (){};
 
 /**
  * [Tips 提交打印格式]
@@ -103,13 +102,82 @@ app.prototype.Tips = function (datas, pays)
 };
 
 /**
- * [DisCount 折扣计算]
+ * [WeightDisCount 称重商品折扣计算]
+ * @param {[Int]}   gid   [商品ID]
+ * @param {[Float]} price [总价]
+ * @return {[Float]} [优惠金额]
+ */
+app.prototype.WeightDisCount = function (gid, price)
+{
+	if (gid <= 0) return 0;
+
+	if (typeof(Global) != 'undefined' && Global.goods_activity && Global.goods_activity.length)
+	{
+		var total = _.tofix(price);
+		if (total <= 0) return 0;
+
+		for (var i = 0; i < Global.goods_activity.length; i ++)
+		{
+			var activity   = Global.goods_activity[i].discount_program;
+			var goods_list = Global.goods_activity[i].goods;
+			var find_goods = false;
+
+			// 检查活动是否过期
+			var time = parseInt(new Date().getTime() / 1000);
+			if (parseInt(Global.goods_activity[i].end_time) < time) return 0;
+
+			for (var k in goods_list)
+			{
+				var goods = goods_list[k];
+
+				if (parseInt(gid) == parseInt(goods.gid))
+				{
+					find_goods = true;
+					break;
+				};
+			};
+
+			if (!find_goods) return 0;
+
+			// 满元
+			if (activity.fav == 2)
+			{
+				for (var j = activity.list.cond.length - 1; j >= 0; j --)
+				{
+					var cond = activity.list.cond[j];
+
+					// 满足条件，结算优惠金额
+					if (total >= cond)
+					{
+						// 打折
+						if (activity.fav_type == 1)
+						{
+							var discount = _.tofix(activity.list.val[j]) * 0.1;
+							return _.tofix(total - _.tofix(total * discount));
+						}
+						// 减钱
+						else if (activity.fav_type == 2)
+						{
+							var money = _.tofix(activity.list.val[j]);
+							return money;
+						};
+					};
+				};
+			};
+		};
+	};
+
+	return 0;
+};
+
+/**
+ * [GoodsDisCount 商品折扣计算]
  * @param {[Int]}   gid   [商品ID]
  * @param {[Float]} price [单价]
  * @param {[Int]}   sum   [数量]
- * @return {[Float]} rt [优惠金额]
+ * @return {[Float]} [优惠金额]
  */
-app.prototype.DisCount = function (gid, price, sum)
+app.prototype.GoodsDisCount = function (gid, price, sum)
 {
 	if (gid <= 0) return 0;
 
@@ -118,14 +186,14 @@ app.prototype.DisCount = function (gid, price, sum)
 		var total = _.tofix(_.tofix(price) * sum);
 		if (total <= 0) return 0;
 
-		//目前不允许多个活动同时存在，否则只计算第一个活动优惠方案
+		// 目前不允许多个活动同时存在，否则只计算第一个活动优惠方案
 		for (var i = 0; i < Global.goods_activity.length; i ++)
 		{
 			var activity   = Global.goods_activity[i].discount_program;
 			var goods_list = Global.goods_activity[i].goods;
 			var find_goods = false;
 
-			//检查活动是否过期
+			// 检查活动是否过期
 			var time = parseInt(new Date().getTime() / 1000);
 			if (parseInt(Global.goods_activity[i].end_time) < time) return 0;
 
@@ -141,23 +209,23 @@ app.prototype.DisCount = function (gid, price, sum)
 
 			if (!find_goods) return 0;
 
-			//满件
+			// 满件
 			if (activity.fav == 1)
 			{
 				for (var j = activity.list.cond.length - 1; j >= 0; j --)
 				{
 					var cond = activity.list.cond[j];
 
-					//满足条件，结算优惠金额
+					// 满足条件，结算优惠金额
 					if (sum >= cond)
 					{
-						//打折
+						// 打折
 						if (activity.fav_type == 1)
 						{
 							var discount = _.tofix(activity.list.val[j]) * 0.1;
 							return _.tofix(total - _.tofix(total * discount));
 						}
-						//减钱
+						// 减钱
 						else if (activity.fav_type == 2)
 						{
 							var rt = _.tofix(activity.list.val[j]);
@@ -166,27 +234,103 @@ app.prototype.DisCount = function (gid, price, sum)
 					};
 				};
 			}
-			//满元
+			// 满元
 			else if (activity.fav == 2)
 			{
 				for (var j = activity.list.cond.length - 1; j >= 0; j --)
 				{
 					var cond = activity.list.cond[j];
 
-					//满足条件，结算优惠金额
+					// 满足条件，结算优惠金额
 					if (total >= cond)
 					{
-						//打折
+						// 打折
 						if (activity.fav_type == 1)
 						{
 							var discount = _.tofix(activity.list.val[j]) * 0.1;
 							return _.tofix(total - _.tofix(total * discount));
 						}
-						//减钱
+						// 减钱
 						else if (activity.fav_type == 2)
 						{
 							var rt = _.tofix(activity.list.val[j]);
 							return rt;
+						};
+					};
+				};
+			};
+		};
+	};
+
+	return 0;
+};
+
+/**
+ * [DisCount 整单折扣计算]
+ * @param {[Array]} goods [商品列表]
+ * @param {[Int]}   sum   [数量]
+ * @return {[Float]} [优惠金额]
+ */
+app.prototype.DisCount = function (goods, sum)
+{
+	if (typeof(GLOBAL) != 'undefined' && GLOBAL.activity && GLOBAL.activity.length)
+	{
+		var total = 0.0;
+		for (var i = 0; i < goods.length; i ++)
+		{
+			total = _.tofix(total + _.tofix(goods[i].price));
+		};
+
+		for (var i = 0; i < GLOBAL.activity.length; i ++)
+		{
+			var activity = GLOBAL.activity[i].discount_program;
+
+			// 满件
+			if (activity.fav == 1)
+			{
+				for (var j = activity.list.cond.length - 1; j >= 0; j --)
+				{
+					var cond = activity.list.cond[j];
+
+					// 满足条件，结算优惠金额
+					if (sum >= cond)
+					{
+						// 打折
+						if (activity.fav_type == 1)
+						{
+							var discount = _.tofix(activity.list.val[j]) * 0.1;
+							return _.tofix(total - _.tofix(total * discount));
+						}
+						// 减钱
+						else if (activity.fav_type == 2)
+						{
+							var money = _.tofix(activity.list.val[j]);
+							return money;
+						};
+					};
+				};
+			}
+			// 满元
+			else if (activity.fav == 2)
+			{
+				for (var j = activity.list.cond.length - 1; j >= 0; j --)
+				{
+					var cond = activity.list.cond[j];
+
+					// 满足条件，结算优惠金额
+					if (total >= cond)
+					{
+						// 打折
+						if (activity.fav_type == 1)
+						{
+							var discount = _.tofix(activity.list.val[j]) * 0.1;
+							return _.tofix(total - _.tofix(total * discount));
+						}
+						// 减钱
+						else if (activity.fav_type == 2)
+						{
+							var money = _.tofix(activity.list.val[j]);
+							return money;
 						};
 					};
 				};

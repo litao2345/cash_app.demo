@@ -1,12 +1,34 @@
-const INCREMENT = (state) => {
-  state.Count ++
+/**
+ * [userinfo 用户信息]
+ */
+const userinfoSETS = (state, datas) => {
+  state.Userinfo = datas
 }
 
-const DECREMENT = (state) => {
-  state.Count --
+/**
+ * [shops 店铺列表]
+ */
+const shopsSETS = (state, datas) => {
+  state.Powers = datas
+}
+
+/**
+ * [powers 权限]
+ */
+const powersSETS = (state, datas) => {
+  state.Powers = datas.split(',')
+}
+
+/**
+ * [activity 店铺活动信息]
+ */
+const activitySETS = (state, datas) => {
+  state.Activity = datas
 }
 
 export {
-  INCREMENT,
-  DECREMENT
+  userinfoSETS,
+  shopsSETS,
+  powersSETS,
+  activitySETS
 }

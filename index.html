@@ -8,9 +8,16 @@
 <body>
 <div id="app"></div>
 
-<script src="./static/app.js"></script>
-<script src="./static/api.js"></script>
+<script src="./static/js/db.js"></script>
+<script src="./static/js/api.js"></script>
+<script src="./static/js/app.js"></script>
 <script>
+/**
+ * [window 运行环境平台]
+ */
+var Release = 'test.';
+var Url     = 'http://' + Release + 'cash.goonjin.com/';
+
 /**
  * [kdh api实例化]
  * @param {[String]} type  [调用方法]
@@ -24,6 +31,26 @@ var kdh = {
 		example.WebBridge(type, datas);
 	}
 };
+
+/**
+ * [Window 窗口事件重置]
+ */
+// // 禁用鼠标右键
+// document.oncontextmenu = function ()
+// {
+// 	return false;
+// };
+
+// // 禁用键盘BackSpace、F5等
+// document.onkeydown = function ()
+// {
+// 	if (event.keyCode === 8 || event.keyCode === 116)
+// 	{ 
+// 		event.keyCode = 0;
+// 		event.cancelBubble = true;
+// 		return false;
+// 	};
+// };
 </script>
 </body>
 </html>

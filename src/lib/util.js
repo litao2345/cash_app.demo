@@ -1,47 +1,85 @@
 /**
- * [jsonp jsonp数据请求]
- * @param {[String]} url   [路径]
- * @param {[Object]} datas [传参]
- * @param {[Object]} $this [Vue对象]
- * @return {[Promise]} promise [回调对象]
+ * [util 公共方法类]
  */
-const jsonp = (url, datas, $this) => {
-  if (url.indexOf('http://') === -1) {
+const util = {
+  /**
+   * [jsonp 网络请求]
+   * @param {[String]} url   [接口]
+   * @param {[Object]} datas [传参]
+   * @param {[Object]} that  [Vue全局对象]
+   * @return {[Promise]} [实例化异步返回]
+   */
+  jsonp: (url, datas, that) => {
     if (!datas.account && !datas.password) {
-      datas.a = $this.ACCOUNT
-      datas.p = $this.PASSWORD
-      datas.company_id = $this.COMPANYID
+      const $log = JSON.parse(sessionStorage.getItem('log'))
+      Object.assign(datas, $log)
     }
 
-    url = $this.jsonpUrl + url
-  } else {
-    datas.a = $this.ACCOUNT
-    datas.p = $this.PASSWORD
-  }
+    const promise = new Promise((resolve, reject) => {
+      url = window.Url + 'api/' + url
+      that.$http.jsonp(url, {params: datas})
+      .then((rt) => {
+        if (rt.body.code === 0) {
+          resolve(rt.body.data)
+        } else {
+          that.lod = false
+          that.$notify.error({
+            title: '出错了',
+            message: rt.body.msg,
+            position: 'top-right',
+            offset: 100
+          })
 
-  const promise = new Promise((resolve, reject) => {
-    $this.$http.jsonp(url, {params: datas}).then((rt) => {
-      if (rt.body.code === 0) {
-        resolve(rt.body.data)
-      } else if (rt.body.code === 503) {
-        localStorage.removeItem(this.Release + 'ACCOUNT')
-        localStorage.removeItem(this.Release + 'PASSWORD')
-        localStorage.removeItem(this.Release + 'COMPANYID')
+          reject(rt.body)
+        }
+      }, (xhr, type, errorThrown) => {
+        that.lod = false
+        that.$message({
+          type: 'error',
+          message: '网络异常，请在连接正常后重试',
+          showClose: true
+        })
 
-        location.reload()
-      } else {
-        $this.err = true
-        $this.errmsg = rt.body.msg
-        reject(rt.body.msg)
-      }
-    }, (xhr, type, errorThrown) => {
-      $this.err = true
-      $this.errmsg = '网络异常，请在连接正常后重试'
-      reject(type)
+        reject(type)
+      })
     })
-  })
 
-  return promise
+    return promise
+  },
+
+  /**
+   * [sync 数据同步]
+   * @param {[String]}   url   [接口]
+   * @param {[Object]}   datas [传参]
+   * @param {[Function]} http  [网络请求]
+   * @return {[Promise]} [实例化异步返回]
+   */
+  sync: (url, datas, http) => {
+    const $log = JSON.parse(sessionStorage.getItem('log'))
+    Object.assign(datas, $log)
+
+    const promise = new Promise((resolve, reject) => {
+      url = window.Url + 'api/' + url
+      http.jsonp(url, {params: datas})
+      .then((rt) => {
+        if (rt.body.code === 0) {
+          resolve(rt.body.data)
+        } else {
+          reject(rt.body)
+        }
+      }, (xhr, type, errorThrown) => {
+        reject(type)
+      })
+    })
+
+    return promise
+  }
 }
 
-export {jsonp}
+const _jsonp = util.jsonp
+const _sync = util.sync
+
+export {
+  _jsonp,
+  _sync
+}

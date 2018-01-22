@@ -87,7 +87,8 @@ export default new Router({
               path: '/message/takeout',
               component: MessageTakeout
             }
-          ]
+          ],
+          hidden: true
         },
 
         {
@@ -119,7 +120,7 @@ export default new Router({
         },
 
         {
-          name: '打印状态',
+          name: '设置状态',
           path: '/printer',
           component: Printer
         },
@@ -159,7 +160,7 @@ export default new Router({
               component: SettingsTips
             },
             {
-              name: '配置发票打印机',
+              name: '配置小票打印机',
               path: '/settings/record',
               component: SettingsRecord
             },
