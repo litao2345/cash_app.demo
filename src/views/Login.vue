@@ -154,40 +154,78 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="sass">
 /**
  * 模块
  */
-.login{height:100%;position:relative;}
+.login
+  position: relative
+  height: 100%
 
 /**
  * 主区域
  */
-.main{width:520px;margin:-220px 0 0 -260px;position:absolute;top:50%;left:50%;}
-.main:before{width:153px;height:54px;background:url('../assets/logo.png');position:absolute;top:-75px;left:-10px;content:"";}
+.main
+  position: absolute
+  top: 50%
+  left: 50%
+  width: 520px
+  margin: -220px 0 0 -260px
+  &:before
+    position: absolute
+    top: -75px
+    left: -10px
+    width: 153px
+    height: 54px
+    content: ""
+    background: url('../assets/logo.png')
 
 /**
  * 输入框
  */
-.txt{height:310px;margin-bottom:60px;padding:0 50px;border-radius:7px;background-color:#fff;}
-.txt dt{padding-top:7px;font-size:22px;line-height:80px;text-align:center;}
-.txt th{width:23px;height:85px;padding-right:22px;vertical-align:top;}
-
-.txt img{margin:16px auto 0;display:block;}
+.txt
+  height: 310px
+  padding: 0 50px
+  margin-bottom: 60px
+  background-color: #fff
+  border-radius: 7px
+  dt
+    padding-top: 7px
+    font-size: 22px
+    line-height: 80px
+    text-align: center
+  th
+    width: 23px
+    height: 85px
+    padding-right: 22px
+    vertical-align: top
+  img
+    display: block
+    margin: 16px auto 0
 
 /**
  * 按钮
  */
-.btn{position:relative;}
-.btn button{width:100%;height:70px;display:block;border-radius:10px;font-size:28px;}
+.btn
+  position: relative
+  button
+    display: block
+    width: 100%
+    height: 70px
+    font-size: 28px
+    border-radius: 10px
 </style>
 
-<style>
+<style lang="sass">
 /**
  * 重置
  */
-.login .el-form-item__content{margin:0 !important;}
-.login .el-form-item.is-success .el-input__inner{border-color:#05A7F9;}
-
-.login .el-input__inner{height:50px;font-size:18px;}
+.login
+  .el-form-item__content
+    margin: 0 !important
+  .el-form-item.is-success .el-input__inner
+    border-color: #05a7f9
+  .el-input__inner
+    height: 50px
+    font-size: 18px
 </style>

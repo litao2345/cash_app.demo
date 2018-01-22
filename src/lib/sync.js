@@ -17,7 +17,7 @@ const sync = {
   init: async (inits, steps) => {
     for (let item of inits) {
       if (steps) steps.name = '正在初始化：' + item.name
-      let r = await sync[item.init]
+      let r = await sync[item.init]()
       if (!r) return false
     }
 
