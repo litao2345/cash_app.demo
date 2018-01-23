@@ -1,7 +1,7 @@
 <template>
   <div class="category">
     <el-row>
-      <el-col :span="18">后厨分类打印：</el-col>
+      <el-col :span="18" class="title">分类：</el-col>
     </el-row>
     <el-row>
       <el-col :span="18">
@@ -12,7 +12,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row>如果您有多档口出菜，您可以设置每个分类的后厨打印</el-row>
+    <div class="hint">如果您有多档口出菜，您可以设置每个分类的后厨打印</div>
     <el-row >
       <el-radio @change="choose" v-model="cook_type_choose" label="1">使用”默认后厨“打印机（”打印设置“中的后厨打印机）</el-radio>
       <el-radio @change="choose" v-model="cook_type_choose" label="2">指定后厨打印机</el-radio>
@@ -23,7 +23,7 @@
       <el-row class="IP">
         <div>打印机IP地址：</div><div class="boxs"><span class="detail">32456132</span></div>
       </el-row>
-      <el-row>
+      <el-row class="print">
         <el-col :span="15"><span @click="open('b')">打印宽度</span></el-col>
         <el-col :span="4"><span>aaa</span></el-col>
         <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
