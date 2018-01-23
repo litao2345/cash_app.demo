@@ -1,32 +1,38 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="18">小票打印机：</el-col>
-      <el-col :span="6" ><el-button  type="primary">测试</el-button></el-col>
-    </el-row>
-    <el-row>
-      <div @click="open('a')">
-        <el-col :span="15"><span>选择型号</span></el-col>
-        <el-col :span="4"><span>{{selected_name}}</span></el-col>
-        <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+  <div class="basic">
+    <div class="btn">
+      <el-button  type="primary">测试</el-button>
+      <el-button  type="primary">保存</el-button>
+    </div>
+    <div class="content">
+      <el-row class="IP">
+        <div>打印机IP地址：</div><div class="boxs"><span class="detail">32456132</span></div>
+      </el-row>
+      <div class="choose">
+        <el-row class="type">
+          <div @click="open('a')">
+            <el-col :span="16"><span>选择型号</span></el-col>
+            <el-col :span="4"><span>{{selected_name}}</span></el-col>
+            <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+          </div>
+        </el-row>
+        <el-row>
+          <el-col :span="16"><span @click="open('b')">打印宽度</span></el-col>
+          <el-col :span="4"><span>aa</span></el-col>
+          <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="16"><span>字体大小</span></el-col>
+          <el-col :span="4"><span>aa</span></el-col>
+          <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="16"><span>打印份数</span></el-col>
+          <el-col :span="4"><span>aa</span></el-col>
+          <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
+        </el-row>
       </div>
-    </el-row>
-    <el-row>
-      <el-col :span="15"><span @click="open('b')">打印宽度</span></el-col>
-      <el-col :span="4"><span></span></el-col>
-      <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="15"><span>字体大小</span></el-col>
-      <el-col :span="4"><span></span></el-col>
-      <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="15"><span>打印份数</span></el-col>
-      <el-col :span="4"><span></span></el-col>
-      <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-    </el-row>
-
+    </div>
     <!-- 子组件 -->
     <iTEMSelected :code="code" :selected="selected" ref="iTEMSelected"
       @Basic_Select="getData"

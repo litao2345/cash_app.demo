@@ -48,7 +48,7 @@ export default {
  * 重置
  */
 .main
-  padding: 30px 60px
+  padding: 15px 50px
   box-sizing: border-box
 .el-tabs
   height: 100%
@@ -81,8 +81,8 @@ export default {
     width: 360px
     padding: 0 40px
     margin-left: -30px
-    color: #62a8ea
-    background-color: #f9fcfe
+    color: #fe0034
+    background-color: #eaeaea
 
   .lnk
     padding: 30px 0
@@ -93,6 +93,13 @@ export default {
  * 重置
  */
 .settings
+  .btn 
+    padding-bottom: 5px
+    overflow: hidden
+    border-bottom: 1px solid #d0d0d0
+    button
+      float: right
+      margin-left: 15px
   .el-radio-group
     display: block
   .el-radio
@@ -105,9 +112,7 @@ export default {
     margin-top: 20px
     cursor: pointer
     &:first-child
-      padding-bottom: 20px
-      border-bottom: 1px solid #d0d0d0
-      line-height: 40px
+      padding-top: 20px
       cursor: auto
   .el-icon-arrow-right
     margin-top: 4px
@@ -119,11 +124,54 @@ export default {
       display: inline-block
     .el-radio__input
       display: none
+  .IP
+    padding: 20px 0 0
+    border-bottom: none
+    div
+      &:first-child
+        float: left
+        width: 120px
+        line-height: 50px
+    .boxs
+      margin-left: 121px
+    .detail
+      display: inline-block
+      width: 100%
+      padding-left: 15px
+      border: 1px solid #d0d0d0
+      box-sizing: border-box
+      line-height: 50px
 
   /**
    * 常规设置
    */
-  .base 
+  .base
+    .el-row
+      .el-col-23
+        padding-left: 10px
+        margin-top: 20px
+        font-weight: bold
+        border-left: 4px solid #fe0034
+      .el-col-24
+        padding-left: 15px
+        margin-top: 10px
+        font-size: 18px
+        .el-checkbox__label, .el-radio__label
+          font-size: 17px
+        .el-checkbox__inner, .el-radio__inner
+          width: 25px
+          height: 25px
+        .el-checkbox__inner::after
+          left: 7px
+          top: -2px
+          width: 6px
+          height: 20px
+          border: 3px solid #fff
+          border-left: 0
+          border-top: 0
+        .el-radio__inner::after
+          width: 10px
+          height: 10px
     .ip
       padding: 10px
       margin: 0
@@ -133,6 +181,21 @@ export default {
       padding: 5px 10px
       border: 1px solid  #dcdfe6
       box-sizing: border-box
+
+  /**
+   * 配置普通打印机
+   */
+  .basic
+    .content
+      padding-left: 10px
+      .choose
+        .type
+          margin-top: 40px
+        .el-row
+          border-bottom: 1px solid #efefef
+          padding-bottom: 20px
+          .el-col-4
+            text-align: right
   /**
    * 门店选择
    */
