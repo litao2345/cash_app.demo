@@ -1,8 +1,9 @@
 <template>
   <div>
+    <el-button type="primary">测试</el-button>
     <el-row>
       <el-col :span="18">后厨打印机：</el-col>
-      <el-col :span="6"><el-button type="primary">测试</el-button></el-col>
+      <el-col :span="6"></el-col>
     </el-row>
     <el-row>
       <el-col :span="15"><span>选择型号</span></el-col>
