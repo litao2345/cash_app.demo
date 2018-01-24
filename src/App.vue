@@ -22,8 +22,10 @@ body
   height: 100%
 body
   margin: 0
+  font-family: 'Avenir', Helvetica, Arial, sans-serif
   color: #1d1d1d
-  background-color: #f2f2f2
+  background: url('./assets/bg.jpg') #fff
+    size: 100% 100%
 
 ::-webkit-scrollbar
   width: 0
@@ -49,6 +51,7 @@ p
 
 input,
 textarea
+  font-family: 'Avenir', Helvetica, Arial, sans-serif
   outline: none
 textarea
   resize: none
@@ -85,9 +88,9 @@ textarea
   .nav
     float: left
     overflow-y: auto
-    width: 300px
+    width: 340px
     height: 100%
-    padding: 0 30px
+    padding: 0 20px
     margin-right: 10px
     background-color: #fff
 

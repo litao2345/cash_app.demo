@@ -1,4 +1,11 @@
 /**
+ * [net 网络连接状态]
+ */
+const netSETS = (state, datas) => {
+  state.Net = parseInt(datas)
+}
+
+/**
  * [userinfo 用户信息]
  */
 const userinfoSETS = (state, datas) => {
@@ -76,6 +83,7 @@ const ordersSETS = (state, datas) => {
 }
 
 export {
+  netSETS,
   userinfoSETS, shopsSETS, powersSETS,
   advSETS, actSETS,
   deskscateSETS, desksSETS,

@@ -59,7 +59,7 @@ export default {
       // 重组请求列表
       arr = []
       for (let item of this.requests) {
-        if (item.db && item.sync) arr.push(item)
+        if (item.db) arr.push(item)
       }
 
       // 同步线上数据

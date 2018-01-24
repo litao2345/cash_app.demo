@@ -41,15 +41,15 @@ const state = {
      * 上传
      */
     uploads: [
-      {name: '订单列表', url: 'create_order', upload: 'upload_orders'},
-      {name: '交班信息', url: 'set_cashier_log', upload: 'upload_works'}
+      {name: '订单列表', url: 'create_order', db: 'orders'},
+      {name: '交班信息', url: 'set_cashier_log', db: 'work_log'}
     ],
 
     /**
      * 接口
      */
     inters: [
-      {name: '客户端基本信息', inter: 'inter_client'}
+      {name: '客户端信息环境', param: 'Client_Datas'}
     ],
 
     /**
@@ -66,6 +66,11 @@ const state = {
       {name: '订单列表', fun: 'ordersSet', db: 'orders'}
     ]
   },
+
+  /**
+   * [Net 网络连接状态]
+   */
+  Net: 1,
 
   /**
    * [Userinfo 用户信息]
@@ -166,7 +171,7 @@ const state = {
     },
 
     /**
-     * 配置小票打印机
+     * 配置交班小票打印设置
      */
     record: {
       numbers: 1 // 打印份数

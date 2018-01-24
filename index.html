@@ -15,42 +15,20 @@
 /**
  * [window 运行环境平台]
  */
-var Release = 'test.';
-var Url     = 'http://' + Release + 'cash.goonjin.com/';
+var Release = 'test.'
+var Url = 'http://' + Release + 'cash.goonjin.com/'
 
 /**
  * [kdh api实例化]
- * @param {[String]} type  [调用方法]
+ * @param {[String]} types [调用方法]
  * @param {[String]} datas [传参]
  * @return {[]} []
  */
-var kdh = {
-	WebBridge: function (type, datas)
-	{
-		var example = new api();
-		example.WebBridge(type, datas);
-	}
-};
-
-/**
- * [Window 窗口事件重置]
- */
-// 禁用鼠标右键
-document.oncontextmenu = function ()
-{
-	return false;
-};
-
-// 禁用键盘BackSpace、F5等
-document.onkeydown = function ()
-{
-	if (event.keyCode === 8 || event.keyCode === 116)
-	{
-		event.keyCode = 0;
-		event.cancelBubble = true;
-		return false;
-	};
-};
+if (!kdh) var kdh = {}
+kdh.WebBridge = function (types, datas) {
+  var example = new api()
+  example.WebBridge(types, datas)
+}
 </script>
 </body>
 </html>

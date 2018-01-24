@@ -31,6 +31,13 @@ const stores = state => {
 }
 
 /**
+ * [net 网络连接状态]
+ */
+const net = state => {
+  return state.Net
+}
+
+/**
  * [userinfo 用户信息]
  */
 const userinfo = state => {
@@ -171,6 +178,7 @@ const us = state => {
 
 export {
   sync, inits, requests, uploads, inters, stores,
+  net,
   userinfo, shops, powers,
   adv, act,
   deskscate, desks,

@@ -1,4 +1,11 @@
 /**
+ * [net 网络连接状态]
+ */
+const netSet = ({commit}, datas) => {
+  commit('netSETS', datas)
+}
+
+/**
  * [userinfo 用户信息]
  */
 const userinfoSet = ({commit}, datas) => {
@@ -76,6 +83,7 @@ const ordersSet = ({commit}, datas) => {
 }
 
 export {
+  netSet,
   userinfoSet, shopsSet, powersSet,
   advSet, actSet,
   deskscateSet, desksSet,

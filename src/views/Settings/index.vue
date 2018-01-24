@@ -50,8 +50,10 @@ export default {
 .main
   padding: 15px 50px
   box-sizing: border-box
+
 .el-tabs
   height: 100%
+
 .el-tab-pane
   overflow-y: auto
   height: 100%
@@ -60,32 +62,20 @@ export default {
 /**
  * 导航
  */
-.nav
+.nav .lnk
+  padding: 25px 0
   a
     display: block
-    height: 61px
-    padding: 0 10px
-    font-size: 18px
-    line-height: 60px
+    padding: 0 12px
+    font-size: 17px
+    line-height: 59px
     text-align: left
     cursor: pointer
+    border-bottom: 1px solid #eaeaea
     transition: all .2s ease
-    &:after
-      display: block
-      width: 300px
-      height: 1px
-      margin-left: -10px
-      background-color: #dfe2e4
-      content: ""
-  .router-link-active
-    width: 360px
-    padding: 0 40px
-    margin-left: -30px
-    color: #fe0034
-    background-color: #eaeaea
-
-  .lnk
-    padding: 30px 0
+    &.router-link-active
+      color: #fe0034
+      background-color: #eaeaea
 </style>
 
 <style lang="sass">

@@ -53,13 +53,13 @@ export default new Router({
       },
       children: [
         {
-          name: '点餐',
+          name: '点　　餐',
           path: '/shopping',
           component: Shopping
         },
 
         {
-          name: '订单',
+          name: '订　　单',
           path: '/orders',
           component: Orders
         },
@@ -99,7 +99,7 @@ export default new Router({
         },
 
         {
-          name: '会员',
+          name: '会　　员',
           path: '/members',
           component: Members,
           redirect: {
@@ -160,7 +160,7 @@ export default new Router({
               component: SettingsTips
             },
             {
-              name: '配置小票打印机',
+              name: '配置交班小票打印设置',
               path: '/settings/record',
               component: SettingsRecord
             },
@@ -198,7 +198,7 @@ export default new Router({
         },
 
         {
-          name: '交班',
+          name: '交　　班',
           path: '/signout',
           component: Signout
         },

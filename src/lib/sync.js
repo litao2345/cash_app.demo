@@ -56,9 +56,23 @@ const sync = {
 
   /**
    * [interline 配置接口数据]
-   * @return {[Boolean]} [结果返回值]
+   * @param {[Object]} obj [接口对象]
+   * @return {[]} []
    */
-  interline: async () => {
+  interline: async (obj) => {
+    let rt = window.kdh[obj.param]
+    if (!rt) {
+      let timer
+      await new Promise((resolve) => {
+        timer = setInterval(() => {
+          rt = window.kdh[obj.param]
+          if (rt) {
+            clearInterval(timer)
+            resolve(true)
+          }
+        }, 1000)
+      })
+    }
   },
 
   /**
