@@ -1,8 +1,8 @@
 <template>
   <div class="shop">
-    <el-row>
-      <el-col :span="18">门店选择：</el-col>
-    </el-row>
+    <div class="btn">
+      <el-button  type="primary">返回</el-button>
+    </div>
     <el-row>
      <el-radio-group v-model="shop_choose">
        <el-radio :label="1">天鹅湖万达店</el-radio>

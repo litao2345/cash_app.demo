@@ -90,6 +90,13 @@ export default {
     button
       float: right
       margin-left: 15px
+  .choose
+    margin-top: 40px
+    .el-row
+      border-bottom: 1px solid #efefef
+      padding-bottom: 20px
+      .el-col-4
+        text-align: right
   .el-radio-group
     display: block
   .el-radio
@@ -131,7 +138,6 @@ export default {
       border: 1px solid #d0d0d0
       box-sizing: border-box
       line-height: 50px
-
   /**
    * 常规设置
    */
@@ -146,22 +152,6 @@ export default {
         padding-left: 15px
         margin-top: 10px
         font-size: 18px
-        .el-checkbox__label, .el-radio__label
-          font-size: 17px
-        .el-checkbox__inner, .el-radio__inner
-          width: 25px
-          height: 25px
-        .el-checkbox__inner::after
-          left: 7px
-          top: -2px
-          width: 6px
-          height: 20px
-          border: 3px solid #fff
-          border-left: 0
-          border-top: 0
-        .el-radio__inner::after
-          width: 10px
-          height: 10px
     .ip
       padding: 10px
       margin: 0
@@ -178,18 +168,14 @@ export default {
   .basic
     .content
       padding-left: 10px
-      .choose
-        .type
-          margin-top: 40px
-        .el-row
-          border-bottom: 1px solid #efefef
-          padding-bottom: 20px
-          .el-col-4
-            text-align: right
   /**
    * 门店选择
    */
   .shop 
+    .btn
+      button
+        float: left
+        margin-left: 0
     .el-radio__input
       float: right
 
@@ -197,9 +183,29 @@ export default {
    * 后厨分类打印
    */
   .category
+    .title
+      padding-left: 10px
+      margin-top: 20px
+      font-weight: bold
+      border-left: 4px solid #fe0034
+    .radio
+      margin-top: 30px
+      .el-radio__label
+        padding: 0
+        font-size: 18px
+      .el-radio
+        width: 120px
+        height: 50px
+        padding: 0
+        margin-top: 0
+        text-align: center
+        line-height: 50px
+    .hint
+      margin-top: 25px
+      font-size: 15px
+      color: #ff0033
     .IP
-      padding: 20px 0 0
-      border-top: 1px solid #d0d0d0
+      padding: 60px 0 0
       border-bottom: none
       div
         &:first-child
@@ -213,4 +219,40 @@ export default {
         padding-left: 15px
         border: 1px solid #d0d0d0
         box-sizing: border-box
+    .print
+      margin-top: 40px
+      &.el-row
+        border-bottom: 1px solid #efefef
+        padding-bottom: 20px
+        .el-col-4
+          text-align: right
+  /**
+   * 其他设备
+   */ 
+  .other
+    .choose
+      padding-left: 10px
+      .type
+        margin-top: 40px
+      .el-row
+        border-bottom: 1px solid #efefef
+        padding-bottom: 20px
+        .el-col-4
+          text-align: right
+  /**
+   * 关于我们
+   */ 
+  .us
+    div
+      margin-top: 20px
+      a
+        color: #01a9f0
+    .title
+      background-image: url(../../assets/login/fire.png)
+      padding: 5px 0 5px 25px
+      background:
+        position: 0 40%
+        size: 20px
+        repeat: no-repeat
+
 </style>

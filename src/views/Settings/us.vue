@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="18">关于我们：</el-col>
-    </el-row>
-    <el-row>
-     <div>关于我们：</div>
-    </el-row>
+  <div class="us">
+    <div class="btn"></div>
+    <div class="title">开店火 1.12</div>
+    <div><img src="../../assets/login/code.png" alt=""></div>
+    <div>安徽共进软件有限公司版权所有</div>
+    <div><a href="http//：www.goonjin.com">http//：www.goonjin.com</a></div>
+    <div><el-button  type="primary">获取最新版本</el-button></div>
   </div>
 </template>
 

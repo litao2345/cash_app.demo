@@ -153,6 +153,23 @@ textarea
 .el-checkbox__input.is-checked .el-checkbox__inner
   border-color: #fe0034
 
+.el-checkbox__label, .el-radio__label
+  font-size: 17px
+.el-checkbox__inner, .el-radio__inner
+  width: 25px
+  height: 25px
+.el-checkbox__inner::after
+  left: 7px
+  top: -2px
+  width: 6px
+  height: 20px
+  border: 3px solid #fff
+  border-left: 0
+  border-top: 0
+.el-radio__inner::after
+  width: 10px
+  height: 10px
+
 /**
  * 其它
  */
