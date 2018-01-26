@@ -1,47 +1,36 @@
 <template>
   <div class="basic">
-    <div class="btn">
-      <el-button  type="primary">测试</el-button>
-      <el-button  type="primary">保存</el-button>
+    <div class="deal">
+      <el-button type="primary"
+        @click="Save_Changes">保存</el-button>
+      <el-button type="primary">测试</el-button>
     </div>
-    <div class="content">
-      <el-row class="IP">
-        <div>打印机IP地址：</div><div class="boxs"><span class="detail">32456132</span></div>
-      </el-row>
-      <div class="choose">
-        <el-row class="type">
-          <div @click="open('a')">
-            <el-col :span="16"><span>选择型号</span></el-col>
-            <el-col :span="4"><span>{{selected_name}}</span></el-col>
-            <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-          </div>
-        </el-row>
-        <el-row>
-          <el-col :span="16"><span @click="open('b')">打印宽度</span></el-col>
-          <el-col :span="4"><span>aa</span></el-col>
-          <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="16"><span>字体大小</span></el-col>
-          <el-col :span="4"><span>aa</span></el-col>
-          <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="16"><span>打印份数</span></el-col>
-          <el-col :span="4"><span>aa</span></el-col>
-          <el-col :span="4"><span class="el-icon-arrow-right"></span></el-col>
-        </el-row>
-      </div>
-    </div>
-    <!-- 子组件 -->
-    <iTEMSelected :code="code" :selected="selected" ref="iTEMSelected"
-      @Basic_Select="getData"
-      v-show="type"></iTEMSelected>
+    <ul class="list">
+      <li
+        @click="Go_Selected(item)"
+        v-for="item of basic">
+        <i class="el-icon-arrow-right"></i>
+        <i
+          v-if="it.selected"
+          v-for="it of item.data">{{datas[item.keyword]}}</i>
+        <p>{{item.name}}</p>
+      </li>
+    </ul>
+
+    <transition name="pop_up">
+      <iTEMSelected :selected="selected"
+        v-on:changed="Change_Selected"
+        v-if="viewsbar"></iTEMSelected>
+    </transition>
   </div>
 </template>
 
 <script>
-import iTEMSelected from '../../components/selected_box'
+import iTEMSelected from '../../components/selected'
+import {_save} from '@/lib/websql'
+
+import {mapGetters} from 'vuex'
+
 export default {
   components: {
     iTEMSelected
@@ -50,52 +39,101 @@ export default {
   ],
   data () {
     return {
-      code: '',
-      selected: 0,
-      selected_name: '未使用',
-      type: false
+      // 初始化
+      datas: {
+        device: '',
+        width: '',
+        font: '',
+        number: ''
+      },
+
+      selected: {}, // 当前选择对象
+      viewsbar: false // 视图状态
     }
+  },
+  computed: {
+    ...mapGetters([
+      'basic'
+    ])
   },
   methods: {
     /**
-     * @param  {[string]} k [获取索引]
-     * @return {[object]} [传送code给子组件json数组]
+     * [Init_Datas 初始化数据]
+     * @return {[]} []
      */
-    open (k) {
-      this.code = {
-        key: k,
-        name: '选择型号',
-        list: {
-          0: {
-            id: 0,
-            name: '未使用'
-          },
-          1: {
-            id: 1,
-            name: '2017-2-3'
-          },
-          2: {
-            id: 2,
-            name: '2018-2-5'
-          }
+    Init_Datas () {
+      for (let index of Object.keys(this.basic)) {
+        let item = this.basic[index]
+        for (let it of item.data) {
+          if (it.selected) this.datas[item.keyword] = it.showname
         }
       }
-      this.type = true
     },
+
     /**
-     * @param  {[string]} k [判断是否选择]
-     * @param  {[number]} select [选择的索引值]
-     * @return {[string]} [选择后的数据]
+     * [Change_Selected 前往选择]
+     * @param {[Object]} item [打印数据]
+     * @return {[]} []
      */
-    getData (k, select) {
-      this.type = false
-      if (k !== null) {
-        this.selected_name = this.code.list[select].name
-        this.selected = select
+    Go_Selected (item) {
+      this.selected = {
+        index: item.keyword,
+        items: item.data
       }
+
+      this.viewsbar = true
+    },
+
+    /**
+     * [Change_Selected 更改选择]
+     * @param {[Object]} item [选项数据]
+     * @return {[]} []
+     */
+    Change_Selected (item) {
+      if (item && (this.datas[item.index] !== item.item)) {
+        this.datas[item.index] = item.item
+      }
+
+      this.viewsbar = false
+    },
+
+    /**
+     * [Save_Changes 保存设置]
+     * @return {[]} []
+     */
+    async Save_Changes () {
+      for (let index of Object.keys(this.basic)) {
+        let item = this.basic[index]
+        for (let it of item.data) {
+          if (this.datas[index] === it.showname) it.selected = 1
+          else it.selected = 0
+        }
+
+        // 数据
+        const data = {
+          name: 'basic' + index,
+          val: JSON.stringify(item)
+        }
+        const r = await _save('cash_conf', data, 'name') // 更新
+        if (!r) {
+          this.$message({
+            type: 'error',
+            message: '失败了 >_<',
+            showClose: true
+          })
+          return
+        }
+      }
+
+      this.$message({
+        type: 'success',
+        message: '设置保存成功',
+        showClose: true
+      })
     }
   },
   created () {
+    this.Init_Datas()
   },
   mounted () {
   }

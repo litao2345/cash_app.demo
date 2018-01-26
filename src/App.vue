@@ -46,6 +46,19 @@ a:visited
   color: #1d1d1d
   text-decoration: none
 
+h1,
+h2,
+h3,
+h4,
+strong,
+b,
+th
+  font-weight: normal
+
+em,
+i
+  font-style: normal
+
 p
   margin: 0
 
@@ -68,15 +81,88 @@ textarea
   opacity: 0
 
 /**
- * 滑入框动画
+ * 滑入滑出动画
  */
 .pop_up-enter-active
   transition: all .5s ease
+
 .pop_up-leave-active
   transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0)
+
 .pop_up-enter,
 .pop_up-leave-to
   transform: translateX(1920px)
+
+/**
+ * 重置
+ */
+// 输入框
+@mixin txt
+  font-size: 16px
+  border-color: #c8c8c8
+  &::-webkit-input-placeholder
+    color: #8c8c8c
+
+.el-input input
+  @include txt
+  height: 50px
+
+.el-textarea textarea
+  @include txt
+  height: 146px
+  padding: 12px 15px
+
+// 选择框
+@mixin chk
+  label
+    margin:
+      left: 0 !important
+      right: 60px
+  span
+    font-size: 16px
+    line-height: 24px
+
+    &.el-checkbox__input,
+    &.el-radio__input
+      float: left
+
+    &.el-checkbox__inner,
+    &.el-radio__inner
+      display: block
+      width: 24px
+      height: 24px
+
+    &.is-focus span
+      border-color: #c8c8c8 !important
+
+    &.is-checked span
+      border-color: #fe0034 !important
+
+.el-radio-group
+  @include chk
+  label
+    display: block
+    margin-top: 20px
+    &:first-child
+      margin: 0
+
+  .el-radio__inner:after
+    width: 10px
+    height: 10px
+
+.el-checkbox-group
+  @include chk
+
+  .el-checkbox__inner
+    border-radius: 3px
+    &:after
+      top: 0
+      left: 7px
+      width: 5px
+      height: 16px
+      border: 3px solid #fff
+        left: 0
+        top: 0
 
 /**
  * 布局
@@ -96,6 +182,7 @@ textarea
 
   .main
     position: relative
+    box-sizing: border-box
     overflow:
       x: hidden
       y: auto
@@ -107,8 +194,9 @@ textarea
 
     .title
       padding: 40px 0 20px
-      font-weight: bold
-      font-size: 20px
+      font:
+        weight: bold
+        size: 20px
       line-height: 40px
       border-bottom: 1px solid #e4e4e4
 
@@ -120,72 +208,6 @@ textarea
       background-color: #ccc
       > .cell
         text-align: center
-
-  .el-row
-    margin-top: 10px
-
-  .pop_up
-    position: absolute
-    top: 0
-    z-index: 20
-    width: 100%
-    height: 100%
-    background: #fff
-
-  .pop_head
-    padding: 30px 0
-    margin: 0 60px
-    border-bottom: 1px solid #d0d0d0
-
-  .pop_radio
-    padding: 10px 60px
-
-/**
- * 重置
- */
-.el-input__inner
-  border-color: #c8c8c8
-  &::-webkit-input-placeholder
-    color: #8c8c8c
-
-.el-checkbox__input.is-focus .el-checkbox__inner
-  border-color: #dcdfe6
-.el-checkbox__input.is-checked .el-checkbox__inner
-  border-color: #fe0034
-
-.el-checkbox__label, .el-radio__label
-  font-size: 17px
-.el-checkbox__inner, .el-radio__inner
-  width: 25px
-  height: 25px
-.el-checkbox__inner::after
-  left: 7px
-  top: -2px
-  width: 6px
-  height: 20px
-  border: 3px solid #fff
-  border-left: 0
-  border-top: 0
-.el-radio__inner::after
-  width: 10px
-  height: 10px
-
-/**
- * 其它
- */
-.app
-  overflow: hidden
-  height: 100%
-
-.r
-  float: right
-
-.blank
-  padding: 20px 0
-  font-size: 15px
-  line-height: 40px
-  color: #777
-  text-align: center
 
 /**
  * 订单, 清单
@@ -236,6 +258,16 @@ textarea
       padding-top: 60px
       margin: 50px 20px 0
       border-top: 1px solid #ccc
+
+/**
+ * 其它
+ */
+.app
+  overflow: hidden
+  height: 100%
+
+.r
+  float: right
 
 /**
  * ProgresSive-Image控件

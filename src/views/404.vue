@@ -1,17 +1,35 @@
 <template>
-  <div class="fialed">{{msg}}</div>
+  <div class="inline">
+    <div class="nav"></div>
+    <div class="main"></div>
+  </div>
 </template>
 
 <script>
 export default {
+  components: {
+  },
+  props: [
+  ],
   data () {
     return {
-      msg: '页面不存在'
     }
+  },
+  computed: {
+  },
+  methods: {
+  },
+  created () {
+  },
+  mounted () {
   }
 }
 </script>
 
-<style scoped>
-.fialed{height:100%;display:flex;justify-content:center;flex-direction:column;color:#777;font-size:20px;text-align:center;}
+<style scoped lang="sass">
+/**
+ * 重置
+ */
+.nav, .main
+  background: url('../assets/404.png') 50% no-repeat #fff
 </style>

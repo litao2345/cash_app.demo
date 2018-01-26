@@ -5,6 +5,7 @@
         v-if="item.name === '系统设置'"
         v-for="item of $router.options.routes[0]['children']">
         <router-link :key="ix" :to="{path: it.path}"
+          v-if="!it.hidden"
           v-for="(it, ix) of item.children">{{it.name}}</router-link>
       </div>
     </div>
@@ -17,8 +18,6 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex'
-
 export default {
   components: {
   },
@@ -29,12 +28,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-    ])
   },
   methods: {
-    ...mapActions([
-    ])
   },
   created () {
   },
@@ -48,21 +43,12 @@ export default {
  * 重置
  */
 .main
-  padding: 15px 50px
-  box-sizing: border-box
-
-.el-tabs
-  height: 100%
-
-.el-tab-pane
-  overflow-y: auto
-  height: 100%
-  margin-top: 40px
+  padding: 12px 50px
 
 /**
- * 导航
+ * 链接
  */
-.nav .lnk
+.lnk
   padding: 25px 0
   a
     display: block
@@ -80,42 +66,70 @@ export default {
 
 <style lang="sass">
 /**
- * 重置
+ * 系统设置
  */
 .settings
-  .btn 
-    padding-bottom: 5px
+
+  // 操作
+  .deal
     overflow: hidden
-    border-bottom: 1px solid #d0d0d0
+    height: 38px
+    padding-bottom: 6px
+    border-bottom: 1px solid #b0adac
     button
       float: right
-      margin-left: 15px
-  .choose
-    margin-top: 40px
-    .el-row
-      border-bottom: 1px solid #efefef
-      padding-bottom: 20px
-      .el-col-4
-        text-align: right
-  .el-radio-group
-    display: block
-  .el-radio
-    display: block
-  .el-radio+.el-radio
-    margin-top: 20px
-    margin-left: 0
+      padding: 11px 25px
+      margin-left: 10px
+      &.l
+        float: left
+        margin: 0
 
-  .el-row
-    margin-top: 20px
-    cursor: pointer
+  // 主题
+  .topic
+    padding-top: 20px
+    dt
+      padding:
+        top: 2px
+        left: 13px
+      font-weight: bold
+      line-height: 18px
+      border-left: 5px solid #fe0034
+    dd
+      padding: 30px 18px 50px
+
+  /**
+   * 列表
+   */
+  .list,
+  .selected
+    line-height: 60px
+    li
+      padding: 0 10px
+      cursor: pointer
+      border-bottom: 1px solid #eaeaea
+
+  .list i
+    float: right
+    color: #9b9b9b
     &:first-child
-      padding-top: 20px
-      cursor: auto
-  .el-icon-arrow-right
-    margin-top: 4px
-  .pup_up 
-    .el-radio__input
+      margin:
+        top: 18px
+        left: 15px
+      font-size: 24px
+      color: #c9c9c9
+
+  /**
+   * 选择
+   */
+  .selected
+    li.active:before
       float: right
+      width: 31px
+      height: 27px
+      margin: 16px 20px 0 0
+      content: ""
+      background-image: url('../../assets/icon/selected.png')
+
   .radio
     .el-radio-group, .el-radio
       display: inline-block
@@ -138,49 +152,9 @@ export default {
       border: 1px solid #d0d0d0
       box-sizing: border-box
       line-height: 50px
-  /**
-   * 常规设置
-   */
-  .base
-    .el-row
-      .el-col-23
-        padding-left: 10px
-        margin-top: 20px
-        font-weight: bold
-        border-left: 4px solid #fe0034
-      .el-col-24
-        padding-left: 15px
-        margin-top: 10px
-        font-size: 18px
-    .ip
-      padding: 10px
-      margin: 0
-      border: 1px solid #dcdfe6
-    .text
-      width: 100%
-      padding: 5px 10px
-      border: 1px solid  #dcdfe6
-      box-sizing: border-box
 
   /**
-   * 配置普通打印机
-   */
-  .basic
-    .content
-      padding-left: 10px
-  /**
-   * 门店选择
-   */
-  .shop 
-    .btn
-      button
-        float: left
-        margin-left: 0
-    .el-radio__input
-      float: right
-
-  /**
-   * 后厨分类打印
+   * 后厨分类打印设置
    */
   .category
     .title
@@ -226,33 +200,4 @@ export default {
         padding-bottom: 20px
         .el-col-4
           text-align: right
-  /**
-   * 其他设备
-   */ 
-  .other
-    .choose
-      padding-left: 10px
-      .type
-        margin-top: 40px
-      .el-row
-        border-bottom: 1px solid #efefef
-        padding-bottom: 20px
-        .el-col-4
-          text-align: right
-  /**
-   * 关于我们
-   */ 
-  .us
-    div
-      margin-top: 20px
-      a
-        color: #01a9f0
-    .title
-      background-image: url(../../assets/login/fire.png)
-      padding: 5px 0 5px 25px
-      background:
-        position: 0 40%
-        size: 20px
-        repeat: no-repeat
-
 </style>

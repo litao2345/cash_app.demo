@@ -11,7 +11,8 @@
         <time>{{time}}</time>
       </div>
     </el-aside>
-    <el-main class="container">
+    <el-main class="container"
+      v-if="!lod">
       <transition name="fade" mode="out-in">
         <router-view />
       </transition>
@@ -21,6 +22,7 @@
 
 <script>
 import {_interline, _storeline} from '@/lib/sync'
+import {_save, _get} from '@/lib/websql'
 
 import {mapGetters, mapActions} from 'vuex'
 
@@ -31,15 +33,8 @@ export default {
   ],
   data () {
     return {
-      /**
-       * 基础信息
-       */
-      failed: false,
-      time: '2018/01/01 18:00',
-
-      /**
-       * 其它
-       */
+      failed: false, // 网络已断开
+      time: '2018/01/01 18:00', // 当前时间
       lod: true // 加载动画
     }
   },
@@ -47,12 +42,19 @@ export default {
     ...mapGetters([
       'inters',
       'stores',
-      'net'
+      'net',
+
+      'base',
+      'basic',
+      'tips',
+      'record',
+      'other'
     ])
   },
   methods: {
     ...mapActions([
       'netSet',
+
       'advSet',
       'actSet',
       'deskscateSet',
@@ -60,7 +62,13 @@ export default {
       'goodscateSet',
       'goodsunitSet',
       'goodsSet',
-      'ordersSet'
+      'ordersSet',
+
+      'baseSet',
+      'basicSet',
+      'tipsSet',
+      'recordSet',
+      'otherSet'
     ]),
 
     /**
@@ -68,35 +76,53 @@ export default {
      * @return {[]} []
      */
     async Init_Working () {
-      // 客户端是否存在
+      // 系统设置部分
+      const settings = ['base', 'basic', 'tips', 'record', 'other']
+      for (let set of settings) {
+        for (let index of Object.keys(this[set])) {
+          let item = this[set][index]
+          item.keyword = index
+
+          const conf = await _get('cash_conf', 'name="' + set + item.keyword + '"') // 查询
+          if (!conf.length) {
+            const data = {
+              name: set + item.keyword,
+              val: JSON.stringify(item)
+            }
+            await _save('cash_conf', data, 'name') // 更新
+          } else {
+            item.data = JSON.parse(conf[0]['val']).data
+          }
+          this.baseSet(item)
+        }
+      }
+
+      // 配置接口数据
       if (window.kdh.ClientBridge) {
         // 重置检测网络状态方法
         window.api.prototype.NetworkCheck = (datas) => {
           this.netSet(datas.state)
         }
         delete window.kdh.Net_Status
-
-        // 配置接口数据
         await _interline(this.inters[0])
       }
 
-      // 重组全局列表
+      // 配置全局数据
       let arr = []
       for (let item of this.stores) {
         if (typeof item.fun === 'string') item.fun = this[item.fun]
         arr.push(item)
       }
-
-      // 配置全局数据
       await _storeline(arr)
 
       // 创建交班记录
+      await this.Start_Working()
 
       this.lod = false // 完成全部配置
     },
 
     // 创建交班记录
-    start_working () {
+    Start_Working () {
       // var start_data = {
       //     uid: get_member_uid(),
       //     start_time: parseInt(new Date().getTime() / 1000),
@@ -262,8 +288,8 @@ export default {
  * 容器区
  */
 .container
-  padding: 10px
   height: 100%
+  padding: 10px
 
   -moz-osx-font-smoothing: grayscale
    -webkit-font-smoothing: antialiased

@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <div class="btn">
-      <el-button  type="primary">测试</el-button>
+  <div class="print">
+    <div class="deal">
+      <el-button type="primary">保存</el-button>
+      <el-button type="primary">恢复默认</el-button>
     </div>
     <div class="choose">
       <el-row>

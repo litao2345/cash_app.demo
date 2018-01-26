@@ -38,27 +38,6 @@ const net = state => {
 }
 
 /**
- * [userinfo 用户信息]
- */
-const userinfo = state => {
-  return state.Userinfo
-}
-
-/**
- * [shops 店铺列表]
- */
-const shops = state => {
-  return state.Shops
-}
-
-/**
- * [powers 权限]
- */
-const powers = state => {
-  return state.Powers
-}
-
-/**
  * [adv 店铺广告图]
  */
 const adv = state => {
@@ -141,7 +120,7 @@ const tips = state => {
   return state.Settings.tips
 }
 
-// 配置小票打印机
+// 配置交班小票打印设置
 const record = state => {
   return state.Settings.record
 }
@@ -151,7 +130,7 @@ const print = state => {
   return state.Settings.print
 }
 
-// 后厨分类打印
+// 后厨分类打印设置
 const category = state => {
   return state.Settings.category
 }
@@ -161,14 +140,9 @@ const other = state => {
   return state.Settings.other
 }
 
-// 门店选择
-const shop = state => {
-  return state.Settings.shop
-}
-
 // 系统更新
-const system = state => {
-  return state.Settings.system
+const messages = state => {
+  return state.Settings.messages
 }
 
 // 关于我们
@@ -179,10 +153,9 @@ const us = state => {
 export {
   sync, inits, requests, uploads, inters, stores,
   net,
-  userinfo, shops, powers,
   adv, act,
   deskscate, desks,
   goodscate, goodsunit, goods,
   orders,
-  settings, base, basic, back, tips, record, print, category, other, shop, system, us
+  settings, base, basic, back, tips, record, print, category, other, messages, us
 }

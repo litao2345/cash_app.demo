@@ -202,12 +202,12 @@ const websql = {
       name: 'cashDb1_' + id,
       displayName: 'cashDb_' + id,
       version: 1.0,
-      debug: true
+      debug: false
     }
 
     // 数据库未建
     const $sync = JSON.parse(localStorage.getItem('sync'))
-    if (!$sync || !$sync[id].length) $d.maxSize = 128 * 1024 * 1024
+    if (!$sync || !$sync[id] || !$sync[id].length) $d.maxSize = 128 * 1024 * 1024
 
     return new window.WebsqlWrapper($d)
   },
@@ -217,6 +217,7 @@ const websql = {
    * @return {[Boolean]} [结果返回值]
    */
   define: async () => {
+    // webview存储周期同步数据
     const $log = JSON.parse(sessionStorage.getItem('log'))
     const id = $log.shop_id
 

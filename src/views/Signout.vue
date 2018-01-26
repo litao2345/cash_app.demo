@@ -1,19 +1,27 @@
 <template>
-  <div class="home">
-    <p>{{msg}}</p>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
+  components: {
+  },
+  props: [
+  ],
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
     }
+  },
+  computed: {
+  },
+  methods: {
+  },
+  created () {
+  },
+  mounted () {
   }
 }
 </script>
 
-<style scoped>
-.home{}
+<style scoped lang="sass">
 </style>

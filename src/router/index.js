@@ -8,6 +8,7 @@ import Signout from '@/views/Signout.vue'
 import Failed from '@/views/404.vue'
 
 import Shopping from '@/views/Shopping'
+
 import Orders from '@/views/Orders'
 
 import Message from '@/views/Message'
@@ -22,6 +23,7 @@ import MembersManage from '@/views/Members/manage'
 import MembersNewmembers from '@/views/Members/newmembers'
 
 import Printer from '@/views/Printer'
+
 import Sync from '@/views/Sync'
 
 import Settings from '@/views/Settings'
@@ -170,7 +172,7 @@ export default new Router({
               component: SettingsPrint
             },
             {
-              name: '后厨分类打印',
+              name: '后厨分类打印设置',
               path: '/settings/category',
               component: SettingsCategory
             },
@@ -185,9 +187,10 @@ export default new Router({
               component: SettingsShop
             },
             {
-              name: '系统更新',
+              name: '系统消息',
               path: '/settings/system',
-              component: SettingsSystem
+              component: SettingsSystem,
+              hidden: true
             },
             {
               name: '关于我们',

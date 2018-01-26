@@ -6,27 +6,6 @@ const netSet = ({commit}, datas) => {
 }
 
 /**
- * [userinfo 用户信息]
- */
-const userinfoSet = ({commit}, datas) => {
-  commit('userinfoSETS', datas)
-}
-
-/**
- * [shops 店铺列表]
- */
-const shopsSet = ({commit}, datas) => {
-  commit('shopsSETS', datas)
-}
-
-/**
- * [powers 权限]
- */
-const powersSet = ({commit}, datas) => {
-  commit('powersSETS', datas)
-}
-
-/**
  * [adv 店铺广告图]
  */
 const advSet = ({commit}, datas) => {
@@ -82,11 +61,46 @@ const ordersSet = ({commit}, datas) => {
   commit('ordersSETS', datas)
 }
 
+/**
+ * [base 常规设置]
+ */
+const baseSet = ({commit}, datas) => {
+  commit('baseSETS', datas)
+}
+
+/**
+ * [basic 配置普通打印机]
+ */
+const basicSet = ({commit}, datas) => {
+  commit('basicSETS', datas)
+}
+
+/**
+ * [tips 配置标签打印机]
+ */
+const tipsSet = ({commit}, datas) => {
+  commit('tipsSETS', datas)
+}
+
+/**
+ * [record 配置交班小票打印设置]
+ */
+const recordSet = ({commit}, datas) => {
+  commit('recordSETS', datas)
+}
+
+/**
+ * [other 其它设备]
+ */
+const otherSet = ({commit}, datas) => {
+  commit('otherSETS', datas)
+}
+
 export {
   netSet,
-  userinfoSet, shopsSet, powersSet,
   advSet, actSet,
   deskscateSet, desksSet,
   goodscateSet, goodsunitSet, goodsSet,
-  ordersSet
+  ordersSet,
+  baseSet, basicSet, tipsSet, recordSet, otherSet
 }

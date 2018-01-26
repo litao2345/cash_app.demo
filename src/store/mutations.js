@@ -6,27 +6,6 @@ const netSETS = (state, datas) => {
 }
 
 /**
- * [userinfo 用户信息]
- */
-const userinfoSETS = (state, datas) => {
-  state.Userinfo = datas
-}
-
-/**
- * [shops 店铺列表]
- */
-const shopsSETS = (state, datas) => {
-  state.Powers = datas
-}
-
-/**
- * [powers 权限]
- */
-const powersSETS = (state, datas) => {
-  state.Powers = datas.split(',')
-}
-
-/**
  * [adv 店铺广告图]
  */
 const advSETS = (state, datas) => {
@@ -82,11 +61,46 @@ const ordersSETS = (state, datas) => {
   state.Orders = datas
 }
 
+/**
+ * [base 常规设置]
+ */
+const baseSETS = (state, datas) => {
+  state.Settings.base[datas.keyword] = datas
+}
+
+/**
+ * [basic 配置普通打印机]
+ */
+const basicSETS = (state, datas) => {
+  state.Settings.basic[datas.keyword] = datas
+}
+
+/**
+ * [tips 配置标签打印机]
+ */
+const tipsSETS = (state, datas) => {
+  state.Settings.tips[datas.keyword] = datas
+}
+
+/**
+ * [record 配置交班小票打印设置]
+ */
+const recordSETS = (state, datas) => {
+  state.Settings.record[datas.keyword] = datas
+}
+
+/**
+ * [other 其它设备]
+ */
+const otherSETS = (state, datas) => {
+  state.Settings.other[datas.keyword] = datas
+}
+
 export {
   netSETS,
-  userinfoSETS, shopsSETS, powersSETS,
   advSETS, actSETS,
   deskscateSETS, desksSETS,
   goodscateSETS, goodsunitSETS, goodsSETS,
-  ordersSETS
+  ordersSETS,
+  baseSETS, basicSETS, tipsSETS, recordSETS, otherSETS
 }

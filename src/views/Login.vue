@@ -51,7 +51,6 @@ import iTEMLoading from '@/components/loading'
 import {_jsonp} from '@/lib/util'
 
 import md5 from 'js-md5'
-import {mapActions} from 'vuex'
 
 export default {
   components: {
@@ -61,10 +60,7 @@ export default {
   ],
   data () {
     return {
-      /**
-       * 信息表单
-       */
-      viewsbar: true, // 视图状态
+      // 表单信息
       forms: {
         account: null,
         password: null
@@ -78,74 +74,85 @@ export default {
         ]
       },
 
-      /**
-       * 背景图片
-       */
+      // 背景图片
       bg: {
         pre: window.Url + '/static/images/cash/bgX.jpg',
         url: window.Url + '/static/images/cash/bg.jpg'
       },
 
-      /**
-       * 其它
-       */
+      viewsbar: true, // 视图状态
       lod: false // 加载动画
     }
   },
   computed: {
   },
   methods: {
-    ...mapActions([
-      'userinfoSet',
-      'shopsSet',
-      'powersSet'
-    ]),
-
     /**
      * [Submit_Form 提交登录信息]
      * @param {[Object]} datas [表单数据]
      * @return {[]} []
      */
-    Submit_Form (datas) {
-      this.$refs[datas].validate((valid) => {
-        if (!valid) return false
-
-        this.lod = true
-
-        const $d = {
-          account: this.forms.account.replace(/(^\s*)|(\s*$)/g, ''),
-          password: md5(this.forms.password)
-        }
-        _jsonp('checkLogin2', $d, this)
-        .then((rt) => {
-          // 设置用户信息
-          let $store = {
-            uid: rt.uid,
-            name: rt.name
-          }
-          this.userinfoSet($store)
-
-          // 设置店铺列表
-          $store = rt.shops
-          this.shopsSet($store)
-
-          // 设置权限
-          $store = rt.role_power_code
-          this.powersSet($store)
-
-          // Webview生存周期登录信息
-          const $log = {
-            a: $d.account,
-            p: $d.password,
-            shop_id: Object.keys(rt.shops)[0]
-          }
-          sessionStorage.setItem('log', JSON.stringify($log))
-        })
-        .then(() => {
-          // 切换状态，开始同步数据
-          this.viewsbar = this.lod = false
+    async Submit_Form (datas) {
+      // 验证表单
+      const test = await new Promise((resolve, reject) => {
+        this.$refs[datas].validate((valid) => {
+          resolve(valid)
         })
       })
+      if (!test) return
+
+      this.lod = true // 请求开始
+
+      // 提交表单
+      const $d = {
+        account: this.forms.account.replace(/(^\s*)|(\s*$)/g, ''),
+        password: md5(this.forms.password)
+      }
+      const rt = await _jsonp('checkLogin2', $d, this)
+      if (!rt) {
+        this.lod = false // 请求结束
+        return
+      }
+
+      // webview存储周期店铺数据
+      const keys = Object.keys(rt.shops)
+      const data = {
+        id: keys[0],
+        name: rt.shops[keys[0]]['name']
+      }
+
+      let $shop = JSON.parse(localStorage.getItem('shop'))
+      if (!$shop) {
+        $shop = data
+      } else {
+        let find = false
+        for (let index of keys) {
+          if ($shop.id === index) find = true
+        }
+        if (!find) $shop = data
+      }
+
+      localStorage.setItem('shop', JSON.stringify($shop))
+
+      // webview生存周期登录数据
+      const $log = {
+        a: $d.account,
+        p: $d.password,
+        shop_id: $shop.id
+      }
+      sessionStorage.setItem('log', JSON.stringify($log))
+
+      // webview生存周期用户数据
+      const $use = {
+        uid: rt.uid,
+        name: rt.name,
+        shops: rt.shops,
+        powers: rt.role_power_code.split(',')
+      }
+      sessionStorage.setItem('use', JSON.stringify($use))
+
+      this.lod = false // 请求结束
+      this.viewsbar = false // 开始同步数据
     }
   },
   created () {
@@ -157,64 +164,58 @@ export default {
 
 <style scoped lang="sass">
 /**
- * 模块
+ * 登录
  */
 .login
   position: relative
   height: 100%
 
-/**
- * 主区域
- */
-.main
-  position: absolute
-  top: 50%
-  left: 50%
-  width: 520px
-  margin: -220px 0 0 -260px
-  &:before
+  // 主区域
+  .main
     position: absolute
-    top: -75px
-    left: -10px
-    width: 153px
-    height: 54px
-    content: ""
-    background: url('../assets/logo.png')
+    top: 50%
+    left: 50%
+    width: 520px
+    margin: -220px 0 0 -260px
+    &:before
+      position: absolute
+      top: -75px
+      left: -10px
+      width: 153px
+      height: 54px
+      content: ""
+      background: url('../assets/logo.png')
 
-/**
- * 输入框
- */
-.txt
-  height: 310px
-  padding: 0 50px
-  margin-bottom: 60px
-  background-color: #fff
-  border-radius: 7px
-  dt
-    padding-top: 7px
-    font-size: 22px
-    line-height: 80px
-    text-align: center
-  th
-    width: 23px
-    height: 85px
-    padding-right: 22px
-    vertical-align: top
-  img
-    display: block
-    margin: 16px auto 0
+  // 输入框
+  .txt
+    height: 310px
+    padding: 0 50px
+    margin-bottom: 60px
+    background-color: #fff
+    border-radius: 7px
+    dt
+      padding-top: 7px
+      font-size: 22px
+      line-height: 80px
+      text-align: center
+    th
+      width: 23px
+      height: 85px
+      padding-right: 22px
+      vertical-align: top
+    img
+      display: block
+      margin: 16px auto 0
 
-/**
- * 按钮
- */
-.btn
-  position: relative
-  button
-    display: block
-    width: 100%
-    height: 70px
-    font-size: 28px
-    border-radius: 10px
+  // 按钮
+  .btn
+    position: relative
+    button
+      display: block
+      width: 100%
+      height: 70px
+      font-size: 28px
+      border-radius: 10px
 </style>
 
 <style lang="sass">
@@ -222,10 +223,13 @@ export default {
  * 重置
  */
 .login
+
   .el-form-item__content
     margin: 0 !important
+
   .el-form-item.is-success .el-input__inner
     border-color: #05a7f9
+
   .el-input__inner
     height: 50px
     font-size: 18px

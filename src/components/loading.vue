@@ -18,12 +18,10 @@ export default {
   ],
   data () {
     return {
-      /**
-       * 同步进度
-       */
+      // 同步进度
       steps: {
-        percent: 0,
-        name: ''
+        name: '',
+        percent: 0
       }
     }
   },
@@ -84,7 +82,7 @@ export default {
      * @return {[Boolean]} [结果返回值]
      */
     async Is_Fstime () {
-      const r = await _get('cash_conf', ('name="fsttime"'))
+      const r = await _get('cash_conf', ('name="fsttime"')) // 查询
       if (!r) {
         return true
       } else {
@@ -102,7 +100,7 @@ export default {
         'name': 'fsttime',
         'val': parseInt(new Date().getTime() / 1000)
       }
-      const r = await _save('cash_conf', data, 'name')
+      const r = await _save('cash_conf', data, 'name') // 更新
       return r
     },
 
@@ -146,30 +144,32 @@ export default {
     content: ""
     background: url('../assets/logoX.png')
 
-/**
- * 当前进度
- */
-.step
-  position: absolute
-  bottom: 37px
-  left: 540px
-  font-size: 13px
-  color: #fff
+  // 当前进度
+  .step
+    position: absolute
+    bottom: 37px
+    left: 540px
+    font-size: 13px
+    color: #fff
 </style>
 
 <style lang="sass">
 /**
  * 重置
  */
-.loading
+.login .loading
+
   .el-progress-bar
     padding: 0
+
   .el-progress-bar__outer
     height: 10px !important
     border: 2px solid #BAB6B4
+
   .el-progress-bar__inner
     height: 10px
     transition: all .2s ease
+
   .el-progress__text
     position: absolute
     top: -35px
@@ -177,6 +177,7 @@ export default {
     margin: 0
     color: #fff
     text-align: right
+
   .el-progress__text:before
     content: "当前同步进度："
 </style>

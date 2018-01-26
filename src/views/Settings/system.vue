@@ -1,12 +1,12 @@
 <template>
-    <div>
-      <el-row>
-        <el-col :span="18">系统更新：</el-col>
-      </el-row>
-      <el-row>
-        <div>已经是最新版本</div>
-      </el-row>
-    </div>
+  <div class="system">
+    <el-row>
+      <el-col :span="18">系统更新：</el-col>
+    </el-row>
+    <el-row>
+      <div>已经是最新版本</div>
+    </el-row>
+  </div>
 </template>
 
 <script>

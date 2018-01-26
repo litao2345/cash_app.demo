@@ -1,5 +1,9 @@
 <template>
   <div class="category">
+    <div class="deal">
+      <el-button type="primary">保存</el-button>
+      <el-button type="primary">测试</el-button>
+    </div>
     <el-row>
       <el-col :span="18" class="title">分类：</el-col>
     </el-row>
@@ -18,8 +22,8 @@
       <el-radio @change="choose" v-model="cook_type_choose" label="2">指定后厨打印机</el-radio>
       <el-radio @change="choose" v-model="cook_type_choose" label="3">此分类不打印（用于酒水、纸巾等无需厨房出菜品）</el-radio>
     </el-row> 
-    <div 
-    v-show="type_choose">
+    <div
+      v-show="type_choose">
       <el-row class="IP">
         <div>打印机IP地址：</div><div class="boxs"><span class="detail">32456132</span></div>
       </el-row>
