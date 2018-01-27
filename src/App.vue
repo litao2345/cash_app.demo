@@ -45,6 +45,7 @@ a:active,
 a:visited
   color: #1d1d1d
   text-decoration: none
+  cursor: pointer
 
 h1,
 h2,

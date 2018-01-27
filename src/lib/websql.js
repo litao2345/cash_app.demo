@@ -271,8 +271,7 @@ const websql = {
    * [insert 添加]
    * @return {[]} []
    */
-  insert: async () => {
-  },
+  insert: async () => {},
 
   /**
    * [del 删除]
@@ -356,6 +355,7 @@ const websql = {
 const _database = websql.database
 const _define = websql.define
 const _drop = websql.drop
+const _insert = websql.insert
 const _del = websql.del
 const _save = websql.save
 const _get = websql.get
@@ -364,6 +364,7 @@ export {
   _database,
   _define,
   _drop,
+  _insert,
   _del,
   _save,
   _get
