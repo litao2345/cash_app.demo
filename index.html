@@ -22,12 +22,13 @@ var Url = 'http://' + Release + 'cash.goonjin.com/'
  * [kdh api实例化]
  * @param {[String]} types [调用方法]
  * @param {[String]} datas [传参]
+ * @param {[String]} dcode [加密]
  * @return {[]} []
  */
 if (!kdh) var kdh = {}
-kdh.WebBridge = function (types, datas) {
+kdh.WebBridge = function (types, datas, dcode) {
   var example = new api()
-  example.WebBridge(types, datas)
+  example.WebBridge(types, datas, dcode)
 }
 </script>
 </body>

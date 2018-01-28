@@ -51,8 +51,7 @@ const sync = {
    * [offline 上传本地数据]
    * @return {[Boolean]} [结果返回值]
    */
-  offline: async () => {
-  },
+  offline: async () => {},
 
   /**
    * [interline 配置接口数据]
@@ -60,12 +59,14 @@ const sync = {
    * @return {[]} []
    */
   interline: async (obj) => {
-    let rt = window.kdh[obj.param]
+    const Base64 = require('js-base64').Base64
+    let rt = JSON.parse(Base64.decode(window.kdh[obj.param]))
+    console.log(rt)
     if (!rt) {
       let timer
       await new Promise((resolve) => {
         timer = setInterval(() => {
-          rt = window.kdh[obj.param]
+          rt = JSON.parse(Base64.decode(window.kdh[obj.param]))
           if (rt) {
             clearInterval(timer)
             resolve(true)

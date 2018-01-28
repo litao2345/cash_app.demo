@@ -7,10 +7,11 @@ var api = function () {}
  * [WebBridge Web端入口]
  * @param {[String]} types [调用方法]
  * @param {[String]} datas [传参]
+ * @param {[String]} dcode [是否加密]
  * @return {[]} []
  */
-api.prototype.WebBridge = function (types, datas) {
-  datas = JSON.parse(datas)
+api.prototype.WebBridge = function (types, datas, dcode) {
+  if (dcode === '0') datas = JSON.parse(datas)
   this[types](datas)
 }
 
@@ -20,6 +21,7 @@ api.prototype.WebBridge = function (types, datas) {
  * @return {[]} []
  */
 api.prototype.ClientEnveriment = function (datas) {
+  console.log(10, datas)
   kdh.Client_Datas = datas
 }
 
