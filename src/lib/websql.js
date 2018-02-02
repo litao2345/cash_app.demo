@@ -264,6 +264,7 @@ const websql = {
       await db.drop(index)
     }
 
+    localStorage.removeItem('shop')
     localStorage.removeItem('sync')
   },
 

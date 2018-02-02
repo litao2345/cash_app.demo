@@ -61,7 +61,6 @@ const sync = {
   interline: async (obj) => {
     const Base64 = require('js-base64').Base64
     let rt = JSON.parse(Base64.decode(window.kdh[obj.param]))
-    console.log(rt)
     if (!rt) {
       let timer
       await new Promise((resolve) => {
@@ -591,12 +590,14 @@ const sync = {
 
 const _baseline = sync.baseline
 const _online = sync.online
+const _offline = sync.offline
 const _interline = sync.interline
 const _storeline = sync.storeline
 
 export {
   _baseline,
   _online,
+  _offline,
   _interline,
   _storeline
 }
