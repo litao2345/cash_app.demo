@@ -303,6 +303,7 @@ textarea
     opacity: 0
   100% 
     opacity: 1
+
 @-webkit-keyframes origin-scale
   0% 
     opacity: 0
