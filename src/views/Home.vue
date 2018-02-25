@@ -46,6 +46,7 @@ export default {
 
       'base',
       'basic',
+      'back',
       'tips',
       'record',
       'other'
@@ -66,6 +67,7 @@ export default {
 
       'baseSet',
       'basicSet',
+      'backSet',
       'tipsSet',
       'recordSet',
       'otherSet'
@@ -77,7 +79,7 @@ export default {
      */
     async Init_Working () {
       // 系统设置部分
-      const settings = ['base', 'basic', 'tips', 'record', 'other']
+      const settings = ['base', 'basic', 'back', 'tips', 'record', 'other']
       for (let set of settings) {
         for (let index of Object.keys(this[set])) {
           let item = this[set][index]

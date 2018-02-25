@@ -76,6 +76,13 @@ const basicSet = ({commit}, datas) => {
 }
 
 /**
+ * [back 配置普通打印机]
+ */
+const backSet = ({commit}, datas) => {
+  commit('backSETS', datas)
+}
+
+/**
  * [tips 配置标签打印机]
  */
 const tipsSet = ({commit}, datas) => {
@@ -102,5 +109,5 @@ export {
   deskscateSet, desksSet,
   goodscateSet, goodsunitSet, goodsSet,
   ordersSet,
-  baseSet, basicSet, tipsSet, recordSet, otherSet
+  baseSet, basicSet, backSet, tipsSet, recordSet, otherSet
 }
