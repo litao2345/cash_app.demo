@@ -139,6 +139,7 @@ textarea
     &.is-checked span
       border-color: #fe0034 !important
 
+// 单选
 .el-radio-group
   @include chk
   label
@@ -151,6 +152,7 @@ textarea
     width: 10px
     height: 10px
 
+// 多选
 .el-checkbox-group
   @include chk
 
@@ -210,10 +212,75 @@ textarea
       > .cell
         text-align: center
 
+// 操作
+.deal
+  overflow: hidden
+  padding-bottom: 6px
+  border-bottom: 1px solid #b0adac
+  button
+    float: right
+    padding: 11px 25px
+    margin-left: 10px
+    &.l
+      float: left
+      margin: 0
+
+// 主题
+.topic
+  padding-top: 20px
+  dt
+    padding:
+      top: 2px
+      left: 13px
+    font-weight: bold
+    line-height: 18px
+    border-left: 5px solid #fe0034
+  dd
+    padding: 30px 18px 40px
+    &:last-child
+      padding-bottom: 0
+
+// 点标
+.lnks a
+  float: left
+  width: 110px
+  color: #000
+  border-bottom: 3px solid transparent
+  &:before
+    float: left
+    width: 12px
+    height: 12px
+    content: ""
+    border-radius: 6px
+  &.all
+    text-align: center
+    &:before
+      display: none
+  &.blank:before
+    background-color: #80e38a
+  &.open:before
+    background-color: #ffe3c2
+  &.opened:before
+    background-color: #ffbfcc
+  &.active
+    border-color: #fe0034
+
+// 其它
+.app
+  overflow: hidden
+  height: 100%
+
+.r
+  float: right
+
+.hidden
+  display: none
+
 /**
  * 订单, 清单
  */
 .detailed
+
   .head
     height: 40px
     font-weight: bold
@@ -259,16 +326,6 @@ textarea
       padding-top: 60px
       margin: 50px 20px 0
       border-top: 1px solid #ccc
-
-/**
- * 其它
- */
-.app
-  overflow: hidden
-  height: 100%
-
-.r
-  float: right
 
 /**
  * ProgresSive-Image控件

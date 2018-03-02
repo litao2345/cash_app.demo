@@ -71,7 +71,7 @@ export default {
     },
 
     /**
-     * [Change_Selected 前往选择]
+     * [Go_Selected 前往选择]
      * @param {[Object]} item [打印数据]
      * @return {[]} []
      */

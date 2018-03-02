@@ -76,6 +76,13 @@ const basicSETS = (state, datas) => {
 }
 
 /**
+ * [back 配置普通打印机]
+ */
+const backSETS = (state, datas) => {
+  state.Settings.back[datas.keyword] = datas
+}
+
+/**
  * [tips 配置标签打印机]
  */
 const tipsSETS = (state, datas) => {
@@ -102,5 +109,5 @@ export {
   deskscateSETS, desksSETS,
   goodscateSETS, goodsunitSETS, goodsSETS,
   ordersSETS,
-  baseSETS, basicSETS, tipsSETS, recordSETS, otherSETS
+  baseSETS, basicSETS, backSETS, tipsSETS, recordSETS, otherSETS
 }

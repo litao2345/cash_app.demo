@@ -142,11 +142,6 @@ const state = {
           {id: 2, name: '关闭', selected: 0}
         ]
       },
-      ip: {
-        name: '后厨显示地址',
-        type: 'text',
-        data: ''
-      },
       remarks: {
         name: '快捷备注',
         type: 'text',
@@ -158,12 +153,14 @@ const state = {
     basic: {
       type: {
         name: '选择类型',
+        type: 'radio',
         data: [
           {linkname: '0', showname: '不使用', selected: 1}
         ]
       },
       width: {
         name: '打印宽度',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '58', selected: 1},
           {linkname: '2', showname: '46', selected: 0},
@@ -172,6 +169,7 @@ const state = {
       },
       font: {
         name: '字体大小',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '12', selected: 1},
           {linkname: '2', showname: '14', selected: 0},
@@ -182,6 +180,7 @@ const state = {
       },
       number: {
         name: '打印份数',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '1', selected: 1},
           {linkname: '2', showname: '2', selected: 0},
@@ -194,22 +193,14 @@ const state = {
 
     // 配置后厨打印机
     back: {
-      size: null, // 型号
-      width: 58, // 打印宽度
-      font: 12, // 字号
-      numbers: 1 // 打印份数
-    },
-
-    // 配置标签打印机
-    tips: {
-      device: {
-        name: '选择设备',
-        data: [
-          {linkname: '0', showname: '不使用', selected: 1}
-        ]
+      ip: {
+        name: '打印机地址IP',
+        type: 'text',
+        data: ''
       },
       width: {
         name: '打印宽度',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '58', selected: 1},
           {linkname: '2', showname: '46', selected: 0},
@@ -218,6 +209,7 @@ const state = {
       },
       font: {
         name: '字体大小',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '12', selected: 1},
           {linkname: '2', showname: '14', selected: 0},
@@ -228,6 +220,49 @@ const state = {
       },
       number: {
         name: '打印份数',
+        type: 'radio',
+        data: [
+          {linkname: '1', showname: '1', selected: 1},
+          {linkname: '2', showname: '2', selected: 0},
+          {linkname: '3', showname: '3', selected: 0},
+          {linkname: '4', showname: '4', selected: 0},
+          {linkname: '5', showname: '5', selected: 0}
+        ]
+      }
+    },
+
+    // 配置标签打印机
+    tips: {
+      device: {
+        name: '选择设备',
+        type: 'radio',
+        data: [
+          {linkname: '0', showname: '不使用', selected: 1}
+        ]
+      },
+      width: {
+        name: '打印宽度',
+        type: 'radio',
+        data: [
+          {linkname: '1', showname: '58', selected: 1},
+          {linkname: '2', showname: '46', selected: 0},
+          {linkname: '3', showname: '32', selected: 0}
+        ]
+      },
+      font: {
+        name: '字体大小',
+        type: 'radio',
+        data: [
+          {linkname: '1', showname: '12', selected: 1},
+          {linkname: '2', showname: '14', selected: 0},
+          {linkname: '3', showname: '16', selected: 0},
+          {linkname: '4', showname: '18', selected: 0},
+          {linkname: '5', showname: '20', selected: 0}
+        ]
+      },
+      number: {
+        name: '打印份数',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '1', selected: 1},
           {linkname: '2', showname: '2', selected: 0},
@@ -242,6 +277,7 @@ const state = {
     record: {
       numbers: {
         name: '打印份数',
+        type: 'radio',
         data: [
           {linkname: '1', showname: '1', selected: 1},
           {linkname: '2', showname: '2', selected: 0},
@@ -254,13 +290,29 @@ const state = {
 
     // 配置打印格式
     print: {
-      mode: 1, // 打印模式 (value: 1点餐, 2水果, 3零售, 4中餐馆/酒店)
+      mode: {
+        name: '打印模式',
+        type: 'radio',
+        data: [
+          {id: 1, name: '快餐', selected: 0},
+          {id: 2, name: '中餐/酒店', selected: 1},
+          {id: 3, name: '零售', selected: 0}
+        ]
+      },
       format: '' // 打印格式
     },
 
     // 后厨分类打印设置
     category: {
-      type: 1, // 分类 (value: 1点餐, 2水果, 3零售, 4中餐馆/酒店)
+      type: {
+        name: '分类',
+        type: 'radio',
+        data: [
+          {id: 1, name: '炒菜', selected: 1},
+          {id: 2, name: '茶水', selected: 0},
+          {id: 3, name: '小吃', selected: 0}
+        ]
+      },
       default: 1, // 是否指定打印机 (value: 1后厨打印, 2指定打印, 3不打印)
       size: null, // 型号
       width: 58 // 打印宽度
@@ -270,18 +322,21 @@ const state = {
     other: {
       screen: {
         name: '选择顾客显示屏设备',
+        type: 'radio',
         data: [
           {linkname: '0', showname: '不使用', selected: 1}
         ]
       },
       scales: {
         name: '选择电子称设备',
+        type: 'radio',
         data: [
           {linkname: '0', showname: '不使用', selected: 1}
         ]
       },
       reader: {
         name: '选择读卡器设备',
+        type: 'radio',
         data: [
           {linkname: '0', showname: '不使用', selected: 1}
         ]

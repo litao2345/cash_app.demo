@@ -43,7 +43,7 @@ export default {
  * 重置
  */
 .main
-  padding: 12px 50px
+  padding: 12px 50px 40px
 
 /**
  * 链接
@@ -70,36 +70,7 @@ export default {
  */
 .settings
 
-  // 操作
-  .deal
-    overflow: hidden
-    height: 38px
-    padding-bottom: 6px
-    border-bottom: 1px solid #b0adac
-    button
-      float: right
-      padding: 11px 25px
-      margin-left: 10px
-      &.l
-        float: left
-        margin: 0
-
-  // 主题
-  .topic
-    padding-top: 20px
-    dt
-      padding:
-        top: 2px
-        left: 13px
-      font-weight: bold
-      line-height: 18px
-      border-left: 5px solid #fe0034
-    dd
-      padding: 30px 18px 50px
-
-  /**
-   * 列表
-   */
+  // 列表
   .list,
   .selected
     line-height: 60px
@@ -107,6 +78,24 @@ export default {
       padding: 0 10px
       cursor: pointer
       border-bottom: 1px solid #eaeaea
+      &.ip
+        padding: 20px 0 0
+        border-bottom: none
+        div:first-child
+          float: left
+          width: 120px
+          line-height: 50px
+
+        .boxs
+          margin-left: 120px
+
+        .detail
+          display: inline-block
+          width: 100%
+          padding-left: 15px
+          border: 1px solid #d0d0d0
+          box-sizing: border-box
+          line-height: 50px
 
   .list i
     float: right
@@ -118,9 +107,7 @@ export default {
       font-size: 24px
       color: #c9c9c9
 
-  /**
-   * 选择
-   */
+  // 选择
   .selected
     li.active:before
       float: right
@@ -131,73 +118,56 @@ export default {
       background-image: url('../../assets/icon/selected.png')
 
   .radio
-    .el-radio-group, .el-radio
+
+    .el-radio-group,
+    .el-radio
       display: inline-block
+
     .el-radio__input
       display: none
-  .IP
-    padding: 20px 0 0
-    border-bottom: none
-    div
-      &:first-child
-        float: left
-        width: 120px
-        line-height: 50px
-    .boxs
-      margin-left: 121px
-    .detail
-      display: inline-block
-      width: 100%
-      padding-left: 15px
-      border: 1px solid #d0d0d0
-      box-sizing: border-box
-      line-height: 50px
 
-  /**
-   * 后厨分类打印设置
-   */
+  // 分类打印
   .category
+
     .title
       padding-left: 10px
       margin-top: 20px
       font-weight: bold
       border-left: 4px solid #fe0034
+
     .radio
-      margin-top: 30px
+      margin-top: 20px
+
       .el-radio__label
         padding: 0
-        font-size: 18px
+        font-size: 17px
+
       .el-radio
         width: 120px
-        height: 50px
+        height: 46px
         padding: 0
-        margin-top: 0
+        line-height: 46px
+        color: #fe0034
         text-align: center
-        line-height: 50px
-    .hint
-      margin-top: 25px
+        border:
+          color: #fe0034
+          radius: 0
+        &.is-checked
+          background-color: #fe0034
+          span
+            color: #fff
+
+    .hot
+      margin: 25px 0
       font-size: 15px
       color: #ff0033
-    .IP
-      padding: 60px 0 0
-      border-bottom: none
-      div
-        &:first-child
-          float: left
-          width: 120px 
-      .boxs
-        margin-left: 121px
-      .detail
-        display: inline-block
-        width: 100%
-        padding-left: 15px
-        border: 1px solid #d0d0d0
-        box-sizing: border-box
-    .print
-      margin-top: 40px
-      &.el-row
-        border-bottom: 1px solid #efefef
-        padding-bottom: 20px
-        .el-col-4
-          text-align: right
+
+  // 打印模式
+  .mode
+    p
+      line-height: 40px
+      color: #999
+    textarea
+      width: 370px
+      height: 520px
 </style>
