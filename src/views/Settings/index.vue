@@ -70,35 +70,6 @@ export default {
  */
 .settings
 
-  // 操作
-  .deal
-    overflow: hidden
-    height: 38px
-    padding-bottom: 6px
-    border-bottom: 1px solid #b0adac
-    button
-      float: right
-      padding: 11px 25px
-      margin-left: 10px
-      &.l
-        float: left
-        margin: 0
-
-  // 主题
-  .topic
-    padding-top: 20px
-    dt
-      padding:
-        top: 2px
-        left: 13px
-      font-weight: bold
-      line-height: 18px
-      border-left: 5px solid #fe0034
-    dd
-      padding: 30px 18px 40px
-      &:last-child
-        padding-bottom: 0
-
   // 列表
   .list,
   .selected
