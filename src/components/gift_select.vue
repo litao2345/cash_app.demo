@@ -11,7 +11,7 @@
           <el-checkbox-group v-model="checkboxGroup5">
             <el-checkbox border :key="gift.id" :label="gift.id"
             v-for="gift in gifts"
-            @change="checkinlist"><div><img :src='gift.src'></div><p>{{gift.goods}}</p><p>{{gift.intergral}}积分</p></el-checkbox>
+            @change="checkinlist"><div><img :src='gift.src'></div><p>{{gift.name}}</p><p>{{gift.integral}}积分</p></el-checkbox>
           </el-checkbox-group>
         </div>
       </div>
@@ -40,7 +40,7 @@ export default {
       this.$emit('basic_select', this.basic_select)
     },
     checkinlist (val) {
-      console.log(this.checkboxGroup5)
+      this.$emit('gifts_select', this.checkboxGroup5)
     }
   },
   created () {

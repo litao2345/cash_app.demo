@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "element-ui": "^2.0.10",
+    "element-ui": "^2.2.0",
     "fastclick": "^1.0.6",
     "js-base64": "^2.4.3",
     "js-md5": "^0.7.3",

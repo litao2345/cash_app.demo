@@ -37,9 +37,9 @@ var _ = {
 }
 
 /**
- * [app 公共方法库 API]
+ * [App.公共方法库 API]
  */
-var app = function () {}
+var App = function () {}
 
 /**
  * [Tips 提交打印格式]
@@ -47,7 +47,7 @@ var app = function () {}
  * @param {[Object]} pays  [支付信息]
  * @return {[]} []
  */
-app.prototype.Tips = function (datas, pays) {
+App.prototype.Tips = function (datas, pays) {
   var arr = []
   arr.push('')
   arr.push(_.size(Global.shopname, 18, 1))
@@ -105,7 +105,7 @@ app.prototype.Tips = function (datas, pays) {
  * @param {[Float]} price [总价]
  * @return {[Float]} [优惠金额]
  */
-app.prototype.WeightDisCount = function (gid, price) {
+App.prototype.WeightDisCount = function (gid, price) {
   if (gid <= 0) return 0
 
   if (typeof(Global) != 'undefined' && Global.goods_activity && Global.goods_activity.length) {
@@ -163,7 +163,7 @@ app.prototype.WeightDisCount = function (gid, price) {
  * @param {[Int]}   sum   [数量]
  * @return {[Float]} [优惠金额]
  */
-app.prototype.GoodsDisCount = function (gid, price, sum) {
+App.prototype.GoodsDisCount = function (gid, price, sum) {
   if (gid <= 0) return 0
 
   if (typeof(Global) != 'undefined' && Global.goods_activity && Global.goods_activity.length) {
@@ -239,7 +239,7 @@ app.prototype.GoodsDisCount = function (gid, price, sum) {
  * @param {[Int]}   sum   [数量]
  * @return {[Float]} [优惠金额]
  */
-app.prototype.DisCount = function (goods, sum) {
+App.prototype.DisCount = function (goods, sum) {
   if (typeof(GLOBAL) != 'undefined' && GLOBAL.activity && GLOBAL.activity.length) {
     var total = 0.0
     for (var i = 0; i < goods.length; i++) {
@@ -290,4 +290,32 @@ app.prototype.DisCount = function (goods, sum) {
   }
 
   return 0
+}
+
+/**
+ * [TimeToStr 时间戳转换]
+ * @param {[Int]}   card_no
+ * @return {[bool]} 
+ */
+App.prototype.TimeToStr = function(timestamp, n){
+  if (typeof(GLOBAL) != 'undefined' && GLOBAL.activity && GLOBAL.activity.length) {
+    if (timestamp == undefined) return "&nbsp;"
+    update = new Date(timestamp * 1000)
+    year   = update.getFullYear()
+    month  = (update.getMonth() + 1 < 10)?('0' + (update.getMonth() + 1)) : (update.getMonth() + 1)
+    day    = (update.getDate() < 10) ? ('0' + update.getDate()) : (update.getDate())
+    hour   = (update.getHours() < 10) ? ('0' + update.getHours()) : (update.getHours())
+    minute = (update.getMinutes() < 10) ? ('0' + update.getMinutes()) : (update.getMinutes())
+    second = (update.getSeconds() < 10) ? ('0' + update.getSeconds()) : (update.getSeconds())
+    if (n == 1) {
+      return (year + '-' + month + '-' + day + ' ' + hour + ':' + minute)
+    }else if( n==2 ){
+      return (year + '-' + month + '-' + day)
+    }else{
+      return 0;
+    }
+  }
+
+  return 0;
+  
 }
