@@ -104,7 +104,11 @@ export default {
       }
       const reg = new RegExp('^[0-9]*$')
       if (!reg.test(this.card_no)) {
-        alert('卡号必须为数字')
+        this.$message({
+          type: 'error',
+          message: '卡号必须为数字',
+          showClose: true
+        })
         return
       }
 
@@ -129,16 +133,28 @@ export default {
      */
     async saveChanges () {
       if (this.card_no.length <= 0) {
-        alert('请输入会员卡号')
+        this.$message({
+          type: 'error',
+          message: '请输入会员卡号',
+          showClose: true
+        })
         return false
       }
       const reg = new RegExp('^[0-9]*$')
       if (!reg.test(this.card_no)) {
-        alert('卡号必须为数字')
+        this.$message({
+          type: 'error',
+          message: '卡号必须为数字',
+          showClose: true
+        })
         return
       }
       if (this.money <= 0) {
-        alert('输入充值金额')
+        this.$message({
+          type: 'error',
+          message: '输入充值金额',
+          showClose: true
+        })
         return
       }
       const $d = {
@@ -182,11 +198,19 @@ export default {
         return
       }
       if (this.data.integral < this.need_integral) {
-        alert('积分不足')
+        this.$message({
+          type: 'error',
+          message: '积分不足',
+          showClose: true
+        })
         return false
       }
       if (!this.seleted_gift) {
-        alert('选择需要兑换的礼品')
+        this.$message({
+          type: 'error',
+          message: '选择需要兑换的礼品',
+          showClose: true
+        })
         return false
       }
       const $d = {
@@ -196,9 +220,13 @@ export default {
       const rt = await _jsonp('memberExchangeGoods', $d, this)
       if (rt) {
         this.showinfo(rt)
-        alert('兑换成功')
         this.seleted_gift = []
         this.getData()
+        this.$message({
+          type: 'success',
+          message: '兑换成功',
+          showClose: true
+        })
       }
     }
   }
